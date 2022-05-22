@@ -1,0 +1,13 @@
+.product_line {
+    margin: 0 18rem 2rem 0;
+    padding: .1rem;
+    color: cornflowerblue;
+}
+
+.product_img {
+    object-fit: contain;
+}
+
+.product_price-after-point {
+    position: relative;
+}

@@ -1,0 +1,14 @@
+input[type=number].no-spinner::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.counter_input {
+    border-color: #dee2e6;
+    outline: none;
+}
+
+button {
+    outline: none;
+}
