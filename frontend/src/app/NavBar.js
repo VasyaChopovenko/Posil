@@ -8,7 +8,7 @@ import "./NavBar.css";
 export default function NavBar() {
     const cartItems = useSelector(selectAllCartItems);
     const cartItemsCount = cartItems.length;
-    const totalPrice = cartItems.reduce((accumulator, current) => accumulator + +current.price, 0);
+    const totalPrice = cartItems.reduce((accumulator, current) => accumulator + +current.totalPrice, 0);
 
     return (
         <Navbar bg="light" expand="lg">

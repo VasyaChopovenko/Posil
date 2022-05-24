@@ -4,7 +4,7 @@ import http from "../../http-common";
 import Counter from "./Counter.js";
 import {Button} from "react-bootstrap";
 import {deleteFromCart} from "../cart/cartSlice";
-import {selectCartItemById} from "./cartSlice";
+import {selectCartItemById, updateCartItem} from "./cartSlice";
 
 export default function CartItem({itemId}) {
     const dispatch = useDispatch();
@@ -25,8 +25,8 @@ export default function CartItem({itemId}) {
         dispatch(deleteFromCart(itemId));
     };
 
-    const onCounterClicked = (e) => {
-        console.log(+e);
+    const onCounterClicked = (value) => {
+        dispatch(updateCartItem({...cartItem, count: value}));
     };
 
     return (
@@ -37,7 +37,7 @@ export default function CartItem({itemId}) {
             <div>{cartItem.price} грн</div>
             <Counter onChange={onCounterClicked} defaultValue={cartItem.count}/>
             <Button onClick={onDeleteFromCartClicked}><i className="bi bi-trash3"/></Button>
-            <div>{}</div>
+            <div style={{minWidth: '4rem', maxWidth: '4rem'}}>{cartItem.totalPrice} грн</div>
         </div>
     );
 }
