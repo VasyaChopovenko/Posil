@@ -5,6 +5,6 @@ import cartReducer from '../features/cart/cartSlice'
 export default configureStore({
     reducer: {
         products: productsReducer,
-        cartItems: cartReducer
+        cart: cartReducer
     },
 })

@@ -1,22 +1,22 @@
 import Container from "react-bootstrap/Container";
 import {Button, Form, FormControl, Nav, Navbar} from "react-bootstrap";
 import React from "react";
+import {useSelector} from "react-redux";
+import {selectAllCartItems} from "../features/cart/cartSlice"
+import "./NavBar.css";
 
 export default function NavBar() {
+    const cartItems = useSelector(selectAllCartItems);
+    const cartItemsCount = cartItems.length;
+    const totalPrice = cartItems.reduce((accumulator, current) => accumulator + +current.price, 0);
+
     return (
         <Navbar bg="light" expand="lg">
             <Container fluid>
                 {/*<Navbar.Brand className="fw-bold m-auto">Posil</Navbar.Brand>*/}
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
-                    <Nav
-                        className="my-2 my-lg-0 me-auto fs-4"
-                        style={{maxHeight: '100px'}}
-                        navbarScroll
-                    >
-                        <Nav.Link href="/cart" className="cursor-pointer"><i className="bi bi-cart"/> Кошик</Nav.Link>
-                    </Nav>
-                    <Form className="d-flex">
+                    <Form className="d-flex me-auto">
                         <FormControl
                             type="search"
                             placeholder="Search"
@@ -25,6 +25,15 @@ export default function NavBar() {
                         />
                         <Button variant="outline-success">Search</Button>
                     </Form>
+                    <Nav
+                        className="my-2 my-lg-0 fs-4"
+                        style={{maxHeight: '100px'}}
+                        navbarScroll
+                    >
+                        <Nav.Link href="/cart" bg="primary" className="cursor-pointer p-0 bg-primary text-white rounded">
+                            <Button className="fs-5"><i className="bi bi-cart"/>    {cartItemsCount ? `${cartItemsCount} на ${totalPrice} грн` : 'Кошик'}</Button>
+                        </Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {selectProductById} from "./productsSlice";
 import {Card, Button} from 'react-bootstrap';
-import {addToCart} from "../cart/cartSlice"
+import {addToCart} from "../cart/cartSlice";
 import http from "../../http-common";
+import {selectCartItemById} from "../cart/cartSlice"
 import './Product.css'
 
 export default function Product({id}) {
@@ -12,7 +13,7 @@ export default function Product({id}) {
     const priceBeforePoint = product.price.toString().split('.')[0];
     const priceAfterPoint = product.price.toString().split('.')[1];
     const dispatch = useDispatch();
-    const alreadyInCart = useSelector(state => state.cartItems).includes(id);
+    const cartItem = useSelector(state => selectCartItemById(state, id));
 
     useEffect(() => {
         if (!imgUrl) {
@@ -25,10 +26,10 @@ export default function Product({id}) {
     });
 
     const onAddToCartClicked = async () => {
-        await dispatch(addToCart(product.id));
+        await dispatch(addToCart({...product, count: 1}));
     };
 
-    const addToCartButton = !alreadyInCart ?
+    const addToCartButton = !cartItem ?
         <Button onClick={onAddToCartClicked} variant="primary"><i className="bi bi-cart-plus"/> У кошик</Button> :
         <Button disabled variant="primary"><i className="bi bi-cart-check"/> Додано</Button>;
 

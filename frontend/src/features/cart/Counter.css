@@ -9,6 +9,11 @@ input[type=number]::-webkit-outer-spin-button {
     outline: none;
 }
 
-button {
+.counter_btn:focus {
     outline: none;
+
+}
+
+.counter_btn:hover {
+    background-color: darkgray;
 }

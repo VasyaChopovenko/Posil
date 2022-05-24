@@ -3,11 +3,3 @@
     padding: .1rem;
     color: cornflowerblue;
 }
-
-.product_img {
-    object-fit: contain;
-}
-
-.product_price-after-point {
-    position: relative;
-}
