@@ -5,7 +5,6 @@ import "./Counter.css"
 export default function Counter(props) {
     let [value, setValue] = useState(props.defaultValue);
     let [oldValue, setOldValue] = useState(props.defaultValue);
-    let input;
 
     const onIncrementClicked = () => {
         setValue(++value);
@@ -20,9 +19,14 @@ export default function Counter(props) {
     };
 
     const onCounterChange = (event) => {
+        if (event < 1 && event) {
+            return;
+        }
+
         if (event) {
             setOldValue(event);
         }
+
         setValue(event);
     };
 
