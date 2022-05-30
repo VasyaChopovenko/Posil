@@ -1,5 +1,11 @@
 .product_line {
-    margin: 0 18rem 2rem 0;
+    margin: 0 85% 10% 0;
     padding: .1rem;
     color: cornflowerblue;
+}
+
+.product_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    justify-items: center;
 }

@@ -8,7 +8,7 @@ import "./NavBar.css";
 export default function NavBar() {
     const cartItems = useSelector(selectAllCartItems);
     const cartItemsCount = cartItems.length;
-    const totalPrice = cartItems.reduce((accumulator, current) => accumulator + +current.totalPrice, 0);
+    const totalPrice = useSelector(state => state.cart.totalPrice);
 
     return (
         <Navbar bg="light" expand="lg">
@@ -16,7 +16,7 @@ export default function NavBar() {
                 {/*<Navbar.Brand className="fw-bold m-auto">Posil</Navbar.Brand>*/}
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
-                    <Form className="d-flex me-auto">
+                    <Form className="d-flex me-auto mt-2">
                         <FormControl
                             type="search"
                             placeholder="Search"
@@ -30,7 +30,7 @@ export default function NavBar() {
                         style={{maxHeight: '100px'}}
                         navbarScroll
                     >
-                        <Nav.Link href="/cart" bg="primary" className="cursor-pointer p-0 bg-primary text-white rounded">
+                        <Nav.Link href="/cart" bg="primary" className="p-0 bg-primary text-white rounded">
                             <Button className="fs-5"><i className="bi bi-cart"/>    {cartItemsCount ? `${cartItemsCount} на ${totalPrice} грн` : 'Кошик'}</Button>
                         </Nav.Link>
                     </Nav>

@@ -6,6 +6,7 @@ import {addToCart} from "../cart/cartSlice";
 import http from "../../http-common";
 import {selectCartItemById} from "../cart/cartSlice"
 import './Product.css'
+import {Link} from "react-router-dom";
 
 export default function Product({id}) {
     const product = useSelector(state => selectProductById(state, id));
@@ -34,16 +35,18 @@ export default function Product({id}) {
         <Button disabled variant="primary"><i className="bi bi-cart-check"/> Додано</Button>;
 
     return (
-        <Card className="shadow-sm bg-white rounded m-2 flex-grow-1" style={{width: '20rem'}}>
-            <Card.Img variant="top" className="p-2 mt-auto" src={imgUrl}/>
+        <Card className="shadow-sm bg-white rounded m-1" style={{minWidth: '16rem', maxWidth: '23rem'}}>
+            <Link style={{zIndex: 10}} to={`/products/${product.id}`}
+                    className="ms-auto mt-1 me-1"><i className="bi bi-pencil-square"/></Link>
+            <Card.Img variant="top" className="m-auto mt-auto w-75" src={imgUrl}/>
             <div>
                 <Card.Body>
-                    <Card.Title className="fs-2">{product.name}</Card.Title>
+                    <Card.Title className="fs-5">{product.name}</Card.Title>
                     <div>
                         <p className="m-auto">{product.countDesc}</p>
                         <hr className="product_line"/>
                         <div className="d-flex justify-content-between">
-                            <div className="d-inline-block position-relative w-auto fs-3 fw-bold">
+                            <div className="d-inline-block position-relative w-auto fs-5 fw-bold">
                                 {priceBeforePoint}
                                 <span className="position-absolute top-0 start-100 ms-1 fs-6">{priceAfterPoint}</span>
                             </div>

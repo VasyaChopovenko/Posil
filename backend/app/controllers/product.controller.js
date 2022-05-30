@@ -47,7 +47,7 @@ exports.update = (req, res) => {
             id: req.body.id
         }
     }).then(data => {
-        res.send(data);
+        Product.findByPk(req.body.id).then((data) => res.send(data));
     }).catch(err => {
         res.status(500).send({
             message:

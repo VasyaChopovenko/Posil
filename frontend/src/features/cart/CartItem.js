@@ -22,7 +22,7 @@ export default function CartItem({itemId}) {
     }, [imgUrl]);
 
     const onDeleteFromCartClicked = () => {
-        dispatch(deleteFromCart(itemId));
+        dispatch(deleteFromCart({id: cartItem.id, price: cartItem.price, count: cartItem.count}));
     };
 
     const onCounterClicked = (value) => {
@@ -31,7 +31,7 @@ export default function CartItem({itemId}) {
 
     return (
         <div className="d-flex align-items-center justify-content-evenly">
-            <img style={{width: '8rem'}} src={imgUrl}/>
+            <img style={{width: '6rem'}} src={imgUrl}/>
             <div style={{minWidth: '12rem', maxWidth: '12rem'}}>{cartItem.name}</div>
             <div>{cartItem.countDesc}</div>
             <div>{cartItem.price} грн</div>

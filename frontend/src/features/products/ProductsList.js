@@ -17,7 +17,7 @@ export function ProductsList() {
     const content = productsIds.map(productId => <Product key={productId} id={productId}/>);
 
     return (
-        <div className="d-flex flex-wrap">
+        <div className="product_grid">
             {content}
         </div>
     );

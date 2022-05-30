@@ -2,9 +2,12 @@ import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolk
 import http from '../../http-common'
 
 const productsAdapter = createEntityAdapter();
+const products = getProductsFromState();
 const initialState = productsAdapter.getInitialState({
+    ...products,
     status: 'idle',
-    error: null
+    error: null,
+    updateStatus: 'idle'
 });
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
@@ -12,8 +15,8 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async ()
     return response.data;
 });
 
-export const fetchProductImg = createAsyncThunk('products/fetchProducts', async (productId) => {
-    const response = await http.get(`/products/${productId}/image`);
+export const updateProduct = createAsyncThunk('products/updateProduct', async(product) => {
+    const response = await http.put('/products', product);
     return response.data;
 });
 
@@ -28,10 +31,22 @@ const productsSlice = createSlice({
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                productsAdapter.upsertMany(state, action.payload)
+                localStorage.setItem('products', JSON.stringify(state));
+                productsAdapter.upsertMany(state, action.payload);
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.status = 'failed';
+                state.error = action.error.message
+            })
+            .addCase(updateProduct.pending, (state, action) => {
+                state.updateStatus = 'loading';
+            })
+            .addCase(updateProduct.fulfilled, (state, action) => {
+                state.updateStatus = 'succeeded';
+                productsAdapter.setOne(state, action.payload)
+            })
+            .addCase(updateProduct.rejected, (state, action) => {
+                state.updateStatus = 'failed';
                 state.error = action.error.message
             })
     },
@@ -43,4 +58,9 @@ export const {
 } = productsAdapter.getSelectors(state => state.products);
 
 export default productsSlice.reducer
+
+function getProductsFromState() {
+    const cart = localStorage.getItem('products');
+    return cart ? JSON.parse(cart) : {ids: [], entities: {}};
+}
 
