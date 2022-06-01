@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchProducts, selectProductById, updateProduct, updateProductImage} from "./productsSlice"
+import {fetchProductImage, fetchProducts, selectProductById, updateProduct, updateProductImage} from "./productsSlice"
 import {useParams} from "react-router";
-import http from "../../http-common";
-import {Container, Form, FormControl, InputGroup} from "react-bootstrap";
+import {Container, Form, FormControl} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {useNavigate} from 'react-router-dom';
 
@@ -11,8 +10,7 @@ export default function EditProductForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productId = useParams().productId;
-
-    const productsStatus = useSelector((state) => state.products.status);
+    const productsStatus = useSelector(state => state.products.status);
 
     useEffect(() => {
         if (productsStatus === 'idle') {
@@ -20,8 +18,13 @@ export default function EditProductForm() {
         }
     }, [productsStatus]);
 
-    const product = useSelector((state) => selectProductById(state, productId));
-    const [imgUrl, setImgUrl] = useState(product.imgUrl);
+    useEffect(() => {
+        dispatch(fetchProductImage(product.id));
+    }, []);
+
+    const product = useSelector(state => selectProductById(state, productId));
+
+    const [imgUrl, setImgUrl] = useState('');
     const [img, setImg] = useState(product.imgUrl);
 
     const [intPricePart, fracPricePart] = product.price.split('.');
@@ -77,7 +80,7 @@ export default function EditProductForm() {
         <Container>
             <div className="shadow-sm bg-white rounded m-1">
                 <div className="d-flex bg-white">
-                    <img style={{width: '30rem'}} className="me-5" src={imgUrl}/>
+                    <img style={{width: '30rem'}} className="me-5" src={imgUrl || product.imgUrl}/>
                     <div>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">

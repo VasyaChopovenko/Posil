@@ -20,7 +20,7 @@ export const updateProduct = createAsyncThunk('products/updateProduct', async(pr
     return response.data;
 });
 
-export const fetchProductImage = createAsyncThunk('products/fetchImages', async(productId) => {
+export const fetchProductImage = createAsyncThunk('products/fetchImage', async(productId) => {
     const response = await http.get(`/products/${productId}/image`, {responseType: 'blob'});
     return {id: productId, imgUrl: URL.createObjectURL(response.data)};
 });

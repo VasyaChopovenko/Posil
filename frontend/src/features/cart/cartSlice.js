@@ -28,12 +28,9 @@ const cartSlice = createSlice({
             state.totalPrice = getCartTotalPrice(state);
             localStorage.setItem('cart', JSON.stringify(state));
         },
-        updateCartItem(state, action, saveCount = false) {
+        updateCartItem(state, action) {
             const cartItem = {...action.payload};
-            if (saveCount && getCartItems().entities[cartItem.id]) {
-                cartItem.count = getCartItems().entities[cartItem.id].count;
-            }
-            cartAdapter.upsertOne(state, {
+            cartAdapter.setOne(state, {
                 ...cartItem,
                 totalPrice: Math.round(((+cartItem.price * +cartItem.count) + Number.EPSILON) * 100) / 100
             });
@@ -44,6 +41,17 @@ const cartSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(updateProduct.fulfilled, (state, action) => {
             cartSlice.caseReducers.updateCartItem(state, {payload: action.payload}, true);
+            const cartItem = {...action.payload};
+            if (getCartItems().entities[cartItem.id]) {
+                cartItem.count = getCartItems().entities[cartItem.id].count;
+
+                cartAdapter.updateOne(state, {
+                    ...cartItem,
+                    totalPrice: Math.round(((+cartItem.price * +cartItem.count) + Number.EPSILON) * 100) / 100
+                });
+                state.totalPrice = getCartTotalPrice(state);
+                localStorage.setItem('cart', JSON.stringify(state));
+            }
         })
     },
 });
