@@ -30,7 +30,7 @@ const cartSlice = createSlice({
         },
         updateCartItem(state, action, saveCount = false) {
             const cartItem = {...action.payload};
-            if (saveCount) {
+            if (saveCount && getCartItems().entities[cartItem.id]) {
                 cartItem.count = getCartItems().entities[cartItem.id].count;
             }
             cartAdapter.upsertOne(state, {

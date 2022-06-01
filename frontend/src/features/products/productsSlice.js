@@ -20,6 +20,16 @@ export const updateProduct = createAsyncThunk('products/updateProduct', async(pr
     return response.data;
 });
 
+export const fetchProductImage = createAsyncThunk('products/fetchImages', async(productId) => {
+    const response = await http.get(`/products/${productId}/image`, {responseType: 'blob'});
+    return {id: productId, imgUrl: URL.createObjectURL(response.data)};
+});
+
+export const updateProductImage = createAsyncThunk('products/updateProductImage', async({formData, productId}) => {
+    const response = await http.put(`/products/${productId}/image`, formData);
+    return {id: productId, imgUrl: URL.createObjectURL(response.data)};
+});
+
 const productsSlice = createSlice({
     name: 'products',
     initialState,
@@ -33,6 +43,7 @@ const productsSlice = createSlice({
                 state.status = 'succeeded';
                 localStorage.setItem('products', JSON.stringify(state));
                 productsAdapter.upsertMany(state, action.payload);
+                state.ids.map(id => fetchProductImage(id));
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.status = 'failed';
@@ -49,6 +60,14 @@ const productsSlice = createSlice({
                 state.updateStatus = 'failed';
                 state.error = action.error.message
             })
+            .addCase(fetchProductImage.fulfilled, (state, action) => {
+                productsAdapter.upsertOne(state, action.payload);
+            })
+            .addCase(updateProductImage.fulfilled, (state, action) => {
+                productsAdapter.upsertOne(state, action.payload);
+            })
+
+
     },
 });
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchProducts, selectProductById, updateProduct} from "./productsSlice"
+import {fetchProducts, selectProductById, updateProduct, updateProductImage} from "./productsSlice"
 import {useParams} from "react-router";
 import http from "../../http-common";
 import {Container, Form, FormControl, InputGroup} from "react-bootstrap";
@@ -8,10 +8,10 @@ import Button from "react-bootstrap/Button";
 import {useNavigate} from 'react-router-dom';
 
 export default function EditProductForm() {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productId = useParams().productId;
+
     const productsStatus = useSelector((state) => state.products.status);
 
     useEffect(() => {
@@ -21,7 +21,8 @@ export default function EditProductForm() {
     }, [productsStatus]);
 
     const product = useSelector((state) => selectProductById(state, productId));
-    const [imgUrl, setImgUrl] = useState('');
+    const [imgUrl, setImgUrl] = useState(product.imgUrl);
+    const [img, setImg] = useState(product.imgUrl);
 
     const [intPricePart, fracPricePart] = product.price.split('.');
     const [integerPricePart, setIntegerPricePart] = useState(intPricePart);
@@ -31,25 +32,22 @@ export default function EditProductForm() {
 
     const [isLoading, setLoading] = useState(false);
 
-
-
-    useEffect(() => {
-        if (!imgUrl) {
-            http.get(`/products/${product.id}/image`, {responseType: 'blob'})
-                .then(response => {
-                    setImgUrl(URL.createObjectURL(response.data));
-                })
-                .catch(error => console.error(error));
-        }
-    });
-
     const onSaveProductClicked = async () => {
         setLoading(true);
         await dispatch(updateProduct({
             ...product, price: `${integerPricePart}.${fractionalPricePart}`, count, name
         }));
+        if (img) {
+            await updateImage();
+        }
         setLoading(false);
         navigate(`/`);
+    };
+
+    const updateImage = async () => {
+        let formData = new FormData();
+        formData.append('productImage', img);
+        dispatch(updateProductImage({formData, productId: product.id}))
     };
 
     const onIntegerPricePart = (e) => {
@@ -70,6 +68,11 @@ export default function EditProductForm() {
         setCount(e.target.value);
     };
 
+    const onFileChosen = (e) => {
+        setImg(e.target.files[0]);
+        setImgUrl(URL.createObjectURL(e.target.files[0]));
+    };
+
     return (
         <Container>
             <div className="shadow-sm bg-white rounded m-1">
@@ -77,6 +80,10 @@ export default function EditProductForm() {
                     <img style={{width: '30rem'}} className="me-5" src={imgUrl}/>
                     <div>
                         <Form>
+                            <Form.Group controlId="formFile" className="mb-3">
+                                <Form.Label>Виберіть нове фото</Form.Label>
+                                <Form.Control type="file" onChange={onFileChosen}/>
+                            </Form.Group>
                             <Form.Label className="mt-2">Назва</Form.Label>
                             <FormControl value={name} onChange={onNameChanged}/>
                             <Form.Label className="mt-2">Ціна</Form.Label>
