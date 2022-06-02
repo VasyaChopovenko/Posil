@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchProductImage, fetchProducts, selectProductById, updateProduct, updateProductImage} from "./productsSlice"
+import {
+    deleteProduct,
+    fetchProductImage,
+    fetchProducts,
+    selectProductById,
+    updateProduct,
+    updateProductImage
+} from "./productsSlice"
 import {useParams} from "react-router";
 import {Container, Form, FormControl} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -81,6 +88,11 @@ export default function EditProductForm() {
         setImgUrl(URL.createObjectURL(e.target.files[0]));
     };
 
+    const onDeleteProductClicked = () => {
+        dispatch(deleteProduct(productId));
+        navigate(`/`);
+    };
+
     return (
         <Container>
             <div className="shadow-sm bg-white rounded m-1">
@@ -108,9 +120,15 @@ export default function EditProductForm() {
                             <Form.Label className="mt-2">Опис кількості:</Form.Label>
                             <FormControl value={countDesc} onChange={onCountDescChanged}/>
                         </Form>
-                        <Button disabled={isLoading} type="button" className="mt-3" onClick={onSaveProductClicked}>
-                            Зберегти
-                        </Button>
+                        <div className="d-flex justify-content-between">
+                            <Button disabled={isLoading} type="button" className="mt-3" onClick={onSaveProductClicked}>
+                                Зберегти
+                            </Button>
+                            <Button disabled={isLoading} type="button" variant="danger" className="mt-3"
+                                    onClick={onDeleteProductClicked}>
+                                Видалити
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

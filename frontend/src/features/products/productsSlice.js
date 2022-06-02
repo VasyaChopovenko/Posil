@@ -40,6 +40,11 @@ export const addImage = createAsyncThunk('products/addProductImage', async({prod
     return {id: productId, imgUrl: URL.createObjectURL(response.data)};
 });
 
+export const deleteProduct = createAsyncThunk('products/deleteProduct', async(productId) => {
+    const response = await http.delete(`/products/${productId}`);
+    return productId;
+});
+
 const productsSlice = createSlice({
     name: 'products',
     initialState,
@@ -80,6 +85,9 @@ const productsSlice = createSlice({
             })
             .addCase(addProduct.fulfilled, (state, action) => {
                 productsAdapter.setOne(state, action.payload);
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                productsAdapter.removeOne(state, action.payload);
             })
 
 

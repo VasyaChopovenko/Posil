@@ -44,7 +44,7 @@ const cartSlice = createSlice({
             if (getCartItems().entities[updatedProduct.id]) {
                 updatedProduct.count = getCartItems().entities[updatedProduct.id].count;
 
-                cartAdapter.updateOne(state, {
+                cartAdapter.upsertOne(state, {
                     ...updatedProduct,
                     totalPrice: Math.round(((+updatedProduct.price * +updatedProduct.count) + Number.EPSILON) * 100) / 100
                 });

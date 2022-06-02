@@ -13,14 +13,17 @@ exports.create = (req, res) => {
                     content: req.file.buffer,
                     product_id: newProduct.id
                 }
-            ).then(img => {console.log('3');res.send(newProduct);})
+            ).then(img => {
+                console.log('3');
+                res.send(newProduct);
+            })
                 .catch(err => {
-                console.log('2');
-                res.status(500).send({
-                    message:
-                        err.message || `Some error occurred while creating product image`
+                    console.log('2');
+                    res.status(500).send({
+                        message:
+                            err.message || `Some error occurred while creating product image`
+                    });
                 });
-            });
         })
         .catch(err => {
             console.log('4');
@@ -75,12 +78,23 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const productId = req.params.id;
+
+    ProductImage.destroy({
+            where: {product_id: productId}
+        }
+    ).catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || `Some error occurred while deleting product image`
+            });
+        });
+
     Product.destroy({
         where: {
             id: productId
         }
     }).then(data => {
-        res.send(data);
+        res.send(productId);
     }).catch(err => {
         res.status(500).send({
             message:

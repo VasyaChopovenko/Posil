@@ -1,9 +1,10 @@
 import Container from "react-bootstrap/Container";
 import {Button, Form, FormControl, Nav, Navbar} from "react-bootstrap";
 import React from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectAllCartItems} from "../features/cart/cartSlice"
 import "./NavBar.css";
+import {setFilterValue} from "../features/products/productsSlice";
 
 export default function NavBar() {
     const cartItems = useSelector(selectAllCartItems);
@@ -16,15 +17,6 @@ export default function NavBar() {
                 {/*<Navbar.Brand className="fw-bold m-auto">Posil</Navbar.Brand>*/}
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
-                    <Form className="d-flex me-auto mt-2">
-                        <FormControl
-                            type="search"
-                            placeholder="Search"
-                            className="me-2"
-                            aria-label="Search"
-                        />
-                        <Button variant="outline-success">Search</Button>
-                    </Form>
                     <Nav
                         className="my-2 my-lg-0 fs-4"
                         style={{maxHeight: '100px'}}
