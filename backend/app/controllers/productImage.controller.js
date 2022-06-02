@@ -40,7 +40,6 @@ exports.update = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-    console.log('ehre');
     const productId = req.params.id;
     ProductImage.findOne({where: {product_id: productId}})
         .then(data => {

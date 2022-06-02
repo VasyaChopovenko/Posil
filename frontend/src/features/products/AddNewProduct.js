@@ -1,57 +1,40 @@
-import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchProductImage, fetchProducts, selectProductById, updateProduct, updateProductImage} from "./productsSlice"
 import {useParams} from "react-router";
+import React, {useEffect, useState} from "react";
+import {
+    addProduct,
+    fetchProductImage,
+    fetchProducts,
+    selectProductById,
+    updateProduct,
+    updateProductImage
+} from "./productsSlice";
 import {Container, Form, FormControl} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {useNavigate} from 'react-router-dom';
 
-export default function EditProductForm() {
+export default function AddNewProduct() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const productId = useParams().productId;
-    const productsStatus = useSelector(state => state.products.status);
-
-    useEffect(() => {
-        if (productsStatus === 'idle') {
-            dispatch(fetchProducts());
-        }
-    }, [productsStatus]);
-
-    useEffect(() => {
-        dispatch(fetchProductImage(product.id));
-    }, []);
-
-    const product = useSelector(state => selectProductById(state, productId));
-
+    const [img, setImg] = useState('');
     const [imgUrl, setImgUrl] = useState('');
-    const [img, setImg] = useState(product.imgUrl);
 
-    const [intPricePart, fracPricePart] = product.price.split('.');
-    const [integerPricePart, setIntegerPricePart] = useState(intPricePart);
-    const [fractionalPricePart, setFractionalPricePart] = useState(fracPricePart);
-    const [name, setName] = useState(product.name);
-    const [count, setCount] = useState(product.count);
-    const [countDesc, setCountDesc] = useState(product.countDesc);
+    const [integerPricePart, setIntegerPricePart] = useState(0);
+    const [fractionalPricePart, setFractionalPricePart] = useState(0);
+    const [name, setName] = useState(0);
+    const [count, setCount] = useState(0);
+    const [countDesc, setCountDesc] = useState('');
 
-    const [isLoading, setLoading] = useState(false);
+    const allowSubmit = img && name && count && countDesc;
 
     const onSaveProductClicked = async () => {
-        setLoading(true);
-        await dispatch(updateProduct({
-            ...product, price: `${integerPricePart}.${fractionalPricePart}`, count, name
-        }));
-        if (img) {
-            await updateImage();
-        }
-        setLoading(false);
-        navigate(`/`);
-    };
-
-    const updateImage = async () => {
+        const newProduct = {name, price: `${integerPricePart}.${fractionalPricePart}`, count, countDesc};
         let formData = new FormData();
         formData.append('productImage', img);
-        dispatch(updateProductImage({formData, productId: product.id}))
+        formData.append('product', JSON.stringify(newProduct));
+
+        await dispatch(addProduct(formData));
+        navigate(`/`);
     };
 
     const onIntegerPricePart = (e) => {
@@ -83,9 +66,9 @@ export default function EditProductForm() {
 
     return (
         <Container>
-            <div className="shadow-sm bg-white rounded m-1">
+            <div className="shadow-sm bg-white rounded m-1 p-4">
                 <div className="d-flex bg-white">
-                    <img style={{width: '30rem'}} className="me-5" src={imgUrl || product.imgUrl}/>
+                    <img style={{width: '25rem', height: '25rem'}} className="me-5 p-3" src={imgUrl || 'https://www.topperstutors.com/img/upload.png'}/>
                     <div>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">
@@ -108,7 +91,7 @@ export default function EditProductForm() {
                             <Form.Label className="mt-2">Опис кількості:</Form.Label>
                             <FormControl value={countDesc} onChange={onCountDescChanged}/>
                         </Form>
-                        <Button disabled={isLoading} type="button" className="mt-3" onClick={onSaveProductClicked}>
+                        <Button disabled={!allowSubmit} type="button" className="mt-3" onClick={onSaveProductClicked}>
                             Зберегти
                         </Button>
                     </div>

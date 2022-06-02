@@ -1,12 +1,29 @@
 const db = require("../models");
 const Product = db.Product;
+const ProductImage = db.ProductImage;
 
 exports.create = (req, res) => {
-    Product.create(req.body)
-        .then(data => {
-            res.send(data);
+    const newProduct = JSON.parse(req.body.product);
+    Product.create(newProduct)
+        .then(newProduct => {
+            console.log('1');
+            ProductImage.create({
+                    name: req.file.originalname,
+                    mimetype: req.file.mimetype,
+                    content: req.file.buffer,
+                    product_id: newProduct.id
+                }
+            ).then(img => {console.log('3');res.send(newProduct);})
+                .catch(err => {
+                console.log('2');
+                res.status(500).send({
+                    message:
+                        err.message || `Some error occurred while creating product image`
+                });
+            });
         })
         .catch(err => {
+            console.log('4');
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while creating products."

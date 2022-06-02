@@ -30,6 +30,9 @@ export default function NavBar() {
                         style={{maxHeight: '100px'}}
                         navbarScroll
                     >
+                        <Nav.Link href="/products/add" className="p-0 text-white rounded me-1">
+                            <Button variant="outline-primary" className="fs-5">Додати продукт</Button>
+                        </Nav.Link>
                         <Nav.Link href="/cart" bg="primary" className="p-0 bg-primary text-white rounded">
                             <Button className="fs-5"><i className="bi bi-cart"/>    {cartItemsCount ? `${cartItemsCount} на ${totalPrice} грн` : 'Кошик'}</Button>
                         </Nav.Link>

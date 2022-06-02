@@ -15,8 +15,10 @@ export default function Product({id}) {
     const cartItem = useSelector(state => selectCartItemById(state, id));
 
     useEffect(() => {
-        dispatch(fetchProductImage(product.id));
-    }, []);
+        if (!product.imgUrl) {
+            dispatch(fetchProductImage(product.id));
+        }
+    });
 
     const onAddToCartClicked = async () => {
         await dispatch(addToCart({...product, count: 1}));

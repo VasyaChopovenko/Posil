@@ -40,14 +40,13 @@ const cartSlice = createSlice({
     },
     extraReducers(builder) {
         builder.addCase(updateProduct.fulfilled, (state, action) => {
-            cartSlice.caseReducers.updateCartItem(state, {payload: action.payload}, true);
-            const cartItem = {...action.payload};
-            if (getCartItems().entities[cartItem.id]) {
-                cartItem.count = getCartItems().entities[cartItem.id].count;
+            const updatedProduct = {...action.payload};
+            if (getCartItems().entities[updatedProduct.id]) {
+                updatedProduct.count = getCartItems().entities[updatedProduct.id].count;
 
                 cartAdapter.updateOne(state, {
-                    ...cartItem,
-                    totalPrice: Math.round(((+cartItem.price * +cartItem.count) + Number.EPSILON) * 100) / 100
+                    ...updatedProduct,
+                    totalPrice: Math.round(((+updatedProduct.price * +updatedProduct.count) + Number.EPSILON) * 100) / 100
                 });
                 state.totalPrice = getCartTotalPrice(state);
                 localStorage.setItem('cart', JSON.stringify(state));
