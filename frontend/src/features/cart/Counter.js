@@ -7,8 +7,10 @@ export default function Counter(props) {
     let [oldValue, setOldValue] = useState(props.defaultValue);
 
     const onIncrementClicked = () => {
-        setValue(++value);
-        props.onChange(+value);
+        if (value < props.maxValue) {
+            setValue(++value);
+            props.onChange(+value);
+        }
     };
 
     const onDecrementClicked = () => {

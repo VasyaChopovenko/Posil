@@ -21,7 +21,7 @@ export default function Product({id}) {
     });
 
     const onAddToCartClicked = async () => {
-        await dispatch(addToCart({...product, count: 1}));
+        await dispatch(addToCart({...product, countInCart: 1}));
     };
 
     const addToCartButton = !cartItem ?

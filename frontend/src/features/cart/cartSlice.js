@@ -23,8 +23,8 @@ const cartSlice = createSlice({
             localStorage.setItem('cart', JSON.stringify(state));
         },
         deleteFromCart(state, action) {
-            const cartItem = action.payload;
-            cartAdapter.removeOne(state, cartItem.id);
+            const cartItemId = action.payload;
+            cartAdapter.removeOne(state, cartItemId);
             state.totalPrice = getCartTotalPrice(state);
             localStorage.setItem('cart', JSON.stringify(state));
         },
@@ -32,7 +32,7 @@ const cartSlice = createSlice({
             const cartItem = {...action.payload};
             cartAdapter.setOne(state, {
                 ...cartItem,
-                totalPrice: Math.round(((+cartItem.price * +cartItem.count) + Number.EPSILON) * 100) / 100
+                totalPrice: Math.round(((+cartItem.price * +cartItem.countInCart) + Number.EPSILON) * 100) / 100
             });
             state.totalPrice = getCartTotalPrice(state);
             localStorage.setItem('cart', JSON.stringify(state));

@@ -10,6 +10,7 @@ export default function CartItem({itemId}) {
     const dispatch = useDispatch();
     const cartItem = useSelector(state => selectCartItemById(state, itemId));
     const [imgUrl, setImgUrl] = useState('');
+    const [countExceeded, setCountExceeded] = useState(false);
 
     useEffect(() => {
         if (!imgUrl) {
@@ -22,11 +23,11 @@ export default function CartItem({itemId}) {
     }, [imgUrl]);
 
     const onDeleteFromCartClicked = () => {
-        dispatch(deleteFromCart({id: cartItem.id, price: cartItem.price, count: cartItem.count}));
+        dispatch(deleteFromCart(cartItem.id));
     };
 
     const onCounterClicked = (value) => {
-        dispatch(updateCartItem({...cartItem, count: value}));
+        dispatch(updateCartItem({...cartItem, countInCart: value}));
     };
 
     return (
@@ -35,7 +36,8 @@ export default function CartItem({itemId}) {
             <div style={{minWidth: '12rem', maxWidth: '12rem'}}>{cartItem.name}</div>
             <div>{cartItem.countDesc}</div>
             <div>{cartItem.price} грн</div>
-            <Counter onChange={onCounterClicked} defaultValue={cartItem.count}/>
+            <Counter maxValue={cartItem.count} onChange={onCounterClicked}
+                     defaultValue={cartItem.countInCart}/>
             <Button onClick={onDeleteFromCartClicked}><i className="bi bi-trash3"/></Button>
             <div style={{minWidth: '4rem', maxWidth: '4rem'}}>{cartItem.totalPrice} грн</div>
         </div>

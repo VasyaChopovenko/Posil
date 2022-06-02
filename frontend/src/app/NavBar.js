@@ -3,8 +3,6 @@ import {Button, Form, FormControl, Nav, Navbar} from "react-bootstrap";
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAllCartItems} from "../features/cart/cartSlice"
-import "./NavBar.css";
-import {setFilterValue} from "../features/products/productsSlice";
 
 export default function NavBar() {
     const cartItems = useSelector(selectAllCartItems);
