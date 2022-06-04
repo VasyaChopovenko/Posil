@@ -6,7 +6,6 @@ exports.create = (req, res) => {
     const newProduct = JSON.parse(req.body.product);
     Product.create(newProduct)
         .then(newProduct => {
-            console.log('1');
             ProductImage.create({
                     name: req.file.originalname,
                     mimetype: req.file.mimetype,
@@ -14,11 +13,9 @@ exports.create = (req, res) => {
                     product_id: newProduct.id
                 }
             ).then(img => {
-                console.log('3');
                 res.send(newProduct);
             })
                 .catch(err => {
-                    console.log('2');
                     res.status(500).send({
                         message:
                             err.message || `Some error occurred while creating product image`
@@ -26,7 +23,6 @@ exports.create = (req, res) => {
                 });
         })
         .catch(err => {
-            console.log('4');
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while creating products."

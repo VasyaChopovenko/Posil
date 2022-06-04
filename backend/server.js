@@ -5,6 +5,7 @@ const cors = require("cors");
 const corsOptions = { origin: "http://localhost:8081" };
 
 const ProductsRouter = require('./app/routes/product.router');
+const OrdersRouter = require('./app/routes/order.router');
 
 
 const db = require("./app/models");
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/products", ProductsRouter);
+app.use("/orders", OrdersRouter);
 
 
 const PORT = process.env.PORT || 8080;
