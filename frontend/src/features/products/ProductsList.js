@@ -3,7 +3,6 @@ import {fetchProducts, selectProductsIds} from "./productsSlice";
 import React, {useEffect} from "react";
 import Product from "./Product";
 import {Card} from "react-bootstrap";
-import Button from "react-bootstrap/Button";
 
 export function ProductsList() {
     const dispatch = useDispatch();

@@ -8,6 +8,7 @@ const upload = multer({storage: multer.memoryStorage()});
 
 productRouter.use('/categories', CategoryRouter);
 productRouter.get('/', productsController.findAll);
+productRouter.post('/cart', productsController.findByIds);
 productRouter.get('/:id', productsController.findOne);
 productRouter.post('/', upload.single('productImage'), productsController.create);
 productRouter.put('/', productsController.update);

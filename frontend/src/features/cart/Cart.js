@@ -1,17 +1,25 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux"
 import CartItem from "./CartItem";
 import {ListGroup, Card} from "react-bootstrap"
 import {selectAllCartItemsIds} from "./cartSlice"
 import Button from "react-bootstrap/Button";
+import {fetchProducts, fetchProductsByIds} from "../products/productsSlice";
 
 export default function Cart() {
     const dispatch = useDispatch();
     const cartItemsIds = useSelector(selectAllCartItemsIds);
     const totalPrice = useSelector(state => state.cart.totalPrice);
     const [comment, setComment] = useState('');
-
     const [commentError, setCommentError] = useState('');
+
+    const productsStatus = useSelector((state) => state.products.status);
+
+    useEffect(() => {
+        if (productsStatus === 'idle') {
+            dispatch(fetchProductsByIds({"ids": cartItemsIds}));
+        }
+    });
 
     const onCommentChanged = (e) => {
         if (e.target.value.length > 800) {

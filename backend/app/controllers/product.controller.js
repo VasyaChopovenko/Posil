@@ -47,6 +47,22 @@ exports.findAll = (req, res) => {
         });
 };
 
+exports.findByIds = (req, res) => {
+    const result = Product.findAll(
+        {
+            where: {id: [...req.body.ids]}
+        });
+
+    result.then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message:
+                err.message || "Some error occurred while retrieving products."
+        });
+    });
+}
+
 exports.findOne = (req, res) => {
     const productId = req.params.id;
     Product.findByPk(productId)

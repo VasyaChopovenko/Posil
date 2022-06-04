@@ -2,9 +2,7 @@ import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolk
 import http from '../../http-common'
 
 const productsAdapter = createEntityAdapter();
-// const products = getProductsFromState();
 const initialState = productsAdapter.getInitialState({
-    // ...products,
     status: 'idle',
     error: null,
     updateStatus: 'idle'
@@ -12,6 +10,11 @@ const initialState = productsAdapter.getInitialState({
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async (categoryId) => {
     const response = categoryId ? await http.get(`/products?categoryId=${categoryId}`) : await http.get(`/products`);
+    return response.data;
+});
+
+export const fetchProductsByIds = createAsyncThunk('products/fetchProductsByIds', async (idsBody) => {
+    const response = await http.post(`/products/cart`, idsBody);
     return response.data;
 });
 
@@ -89,6 +92,9 @@ const productsSlice = createSlice({
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 productsAdapter.removeOne(state, action.payload);
             })
+            .addCase(fetchProductsByIds.fulfilled, (state, action) => {
+                productsAdapter.setAll(state, action.payload);
+            })
 
 
     },
@@ -100,9 +106,4 @@ export const {
 } = productsAdapter.getSelectors(state => state.products);
 
 export default productsSlice.reducer
-
-// function getProductsFromState() {
-//     const cart = localStorage.getItem('products');
-//     return cart ? JSON.parse(cart) : {ids: [], entities: {}};
-// }
 
