@@ -1,26 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useSelector} from "react-redux"
 import CartItem from "./CartItem";
 import {ListGroup, Container, Card} from "react-bootstrap"
-import {fetchProducts} from "../products/productsSlice";
-import {useDispatch} from "react-redux"
 import {selectAllCartItemsIds} from "./cartSlice"
 import Button from "react-bootstrap/Button";
 
 export default function Cart() {
-    const dispatch = useDispatch();
     const cartItemsIds = useSelector(selectAllCartItemsIds);
     const totalPrice = useSelector(state => state.cart.totalPrice);
-    const productsStatus = useSelector((state) => state.products.status);
     const [comment, setComment] = useState('');
 
     const [commentError, setCommentError] = useState('');
-
-    useEffect(() => {
-        if (productsStatus === 'idle') {
-            dispatch(fetchProducts());
-        }
-    });
 
     const onCommentChanged = (e) => {
         if (e.target.value.length > 800) {
@@ -31,7 +21,7 @@ export default function Cart() {
         }
     };
 
-    const cartItems = productsStatus === 'succeeded' && cartItemsIds.length > 0 ? cartItemsIds.map(itemId =>
+    const cartItems = cartItemsIds.length > 0 ? cartItemsIds.map(itemId =>
             <ListGroup.Item className="shadow-sm" key={itemId}><CartItem itemId={itemId}/></ListGroup.Item>) :
         <Card>
             <Card.Body className="d-flex mt-4 flex-column align-items-center">

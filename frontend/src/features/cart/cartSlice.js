@@ -1,5 +1,5 @@
 import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
-import {fetchProducts, updateProduct} from "../products/productsSlice";
+import {updateProduct} from "../products/productsSlice";
 
 const cartItems = getCartItems();
 const cartAdapter = createEntityAdapter();
@@ -41,12 +41,11 @@ const cartSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(updateProduct.fulfilled, (state, action) => {
             const updatedProduct = {...action.payload};
-            if (getCartItems().entities[updatedProduct.id]) {
-                updatedProduct.count = getCartItems().entities[updatedProduct.id].count;
-
+            const cartItem = getCartItems().entities[updatedProduct.id]
+            if (cartItem) {
                 cartAdapter.upsertOne(state, {
                     ...updatedProduct,
-                    totalPrice: Math.round(((+updatedProduct.price * +updatedProduct.count) + Number.EPSILON) * 100) / 100
+                    totalPrice: Math.round(((+updatedProduct.price * +cartItem.countInCart) + Number.EPSILON) * 100) / 100
                 });
                 state.totalPrice = getCartTotalPrice(state);
                 localStorage.setItem('cart', JSON.stringify(state));

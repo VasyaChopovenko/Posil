@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
                     unique: true,
                 },
                 as: 'productImage'
-            })
+            });
+
+            Product.belongsTo(models.Category, {
+                foreignKey: {
+                    name: 'category_id'
+                },
+                as: "category"
+            });
         }
     }
 

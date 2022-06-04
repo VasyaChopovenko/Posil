@@ -1,15 +1,7 @@
 const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Category extends Model {
-        static associate(models) {
-            Category.hasOne(models.Product, {
-                as: "product",
-                foreignKey: "category_id",
-                uniqueKey: false,
-            })
-        }
-    }
+    class Category extends Model {}
 
     return Category.init({
         name: {

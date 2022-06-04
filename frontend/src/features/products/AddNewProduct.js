@@ -1,15 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router";
-import React, {useEffect, useState} from "react";
-import {
-    addProduct,
-    fetchProductImage,
-    fetchProducts,
-    selectProductById,
-    updateProduct,
-    updateProductImage
-} from "./productsSlice";
+import React, {useState} from "react";
+import {addProduct} from "./productsSlice";
 import {Container, Form, FormControl} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
@@ -21,11 +13,11 @@ export default function AddNewProduct() {
 
     const [integerPricePart, setIntegerPricePart] = useState(0);
     const [fractionalPricePart, setFractionalPricePart] = useState(0);
-    const [name, setName] = useState(0);
+    const [name, setName] = useState('');
     const [count, setCount] = useState(0);
     const [countDesc, setCountDesc] = useState('');
 
-    const allowSubmit = img && name && count && countDesc;
+    const allowSubmit = img && name && count && countDesc && integerPricePart;
 
     const onSaveProductClicked = async () => {
         const newProduct = {name, price: `${integerPricePart}.${fractionalPricePart}`, count, countDesc};
@@ -38,7 +30,8 @@ export default function AddNewProduct() {
     };
 
     const onIntegerPricePart = (e) => {
-        setIntegerPricePart(e.target.value);
+        if (e.target.value >= 0)
+            setIntegerPricePart(e.target.value);
     };
 
     const onFractionalPricePart = (e) => {
@@ -68,7 +61,8 @@ export default function AddNewProduct() {
         <Container>
             <div className="shadow-sm bg-white rounded m-1 p-4">
                 <div className="d-flex bg-white">
-                    <img style={{width: '25rem', height: '25rem'}} className="me-5 p-3" src={imgUrl || 'https://www.topperstutors.com/img/upload.png'}/>
+                    <img style={{width: '25rem', height: '25rem'}} className="me-5 p-3"
+                         src={imgUrl || 'https://www.topperstutors.com/img/upload.png'}/>
                     <div>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">

@@ -17,13 +17,6 @@ export default function EditProductForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productId = useParams().productId;
-    const productsStatus = useSelector(state => state.products.status);
-
-    useEffect(() => {
-        if (productsStatus === 'idle') {
-            dispatch(fetchProducts());
-        }
-    }, [productsStatus]);
 
     useEffect(() => {
         dispatch(fetchProductImage(product.id));
@@ -95,9 +88,9 @@ export default function EditProductForm() {
 
     return (
         <Container>
-            <div className="shadow-sm bg-white rounded m-1">
+            <div className="shadow-sm bg-white rounded m-1 pb-2">
                 <div className="d-flex bg-white">
-                    <img style={{width: '30rem'}} className="me-5" src={imgUrl || product.imgUrl}/>
+                    <img style={{maxWidth: '30rem', maxHeight: '30rem'}} src={imgUrl || product.imgUrl}/>
                     <div>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">

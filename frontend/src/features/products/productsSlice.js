@@ -10,8 +10,8 @@ const initialState = productsAdapter.getInitialState({
     updateStatus: 'idle'
 });
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-    const response = await http.get('/products');
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async (categoryId) => {
+    const response = await http.get(`/products?categoryId=${categoryId}`);
     return response.data;
 });
 
@@ -41,7 +41,7 @@ export const addImage = createAsyncThunk('products/addProductImage', async({prod
 });
 
 export const deleteProduct = createAsyncThunk('products/deleteProduct', async(productId) => {
-    const response = await http.delete(`/products/${productId}`);
+    const response = await http.delete(`/products`);
     return productId;
 });
 

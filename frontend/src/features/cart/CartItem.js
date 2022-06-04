@@ -10,7 +10,6 @@ export default function CartItem({itemId}) {
     const dispatch = useDispatch();
     const cartItem = useSelector(state => selectCartItemById(state, itemId));
     const [imgUrl, setImgUrl] = useState('');
-    const [countExceeded, setCountExceeded] = useState(false);
 
     useEffect(() => {
         if (!imgUrl) {

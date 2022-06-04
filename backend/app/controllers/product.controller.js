@@ -31,11 +31,15 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    Product.findAll()
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
+    const categoryId = req.query.categoryId;
+    const result = !categoryId ? Product.findAll() : Product.findAll(
+        {
+            where: { category_id: categoryId }
+        });
+
+    result.then(data => {
+        res.send(data);
+    }).catch(err => {
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while retrieving products."
@@ -79,11 +83,11 @@ exports.delete = (req, res) => {
             where: {product_id: productId}
         }
     ).catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || `Some error occurred while deleting product image`
-            });
+        res.status(500).send({
+            message:
+                err.message || `Some error occurred while deleting product image`
         });
+    });
 
     Product.destroy({
         where: {
