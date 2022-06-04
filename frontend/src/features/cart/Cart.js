@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import CartItem from "./CartItem";
-import {ListGroup, Container, Card} from "react-bootstrap"
+import {ListGroup, Card} from "react-bootstrap"
 import {selectAllCartItemsIds} from "./cartSlice"
 import Button from "react-bootstrap/Button";
 
 export default function Cart() {
+    const dispatch = useDispatch();
     const cartItemsIds = useSelector(selectAllCartItemsIds);
     const totalPrice = useSelector(state => state.cart.totalPrice);
     const [comment, setComment] = useState('');
@@ -30,6 +31,10 @@ export default function Cart() {
             </Card.Body>
         </Card>;
 
+    const onOrderConfirmed = () => {
+        dispatch();
+    };
+
     return (
         <section className="d-flex gap-2 m-2">
             <ListGroup className="w-75 gap-2">
@@ -47,7 +52,7 @@ export default function Cart() {
                     </label>
                     <textarea style={{minHeight: '8rem', maxHeight: '20rem'}} placeholder="..." value={comment}
                               onChange={onCommentChanged}/>
-                    <Button variant="primary" className="m-auto mt-4"
+                    <Button onClick={onOrderConfirmed} variant="primary" className="m-auto mt-4"
                             disabled={commentError || cartItemsIds.length === 0} href={"/"}>Замовити</Button>
                 </Card.Body>
             </Card>

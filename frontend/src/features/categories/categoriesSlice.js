@@ -2,7 +2,10 @@ import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolk
 import http from '../../http-common';
 
 const categoriesAdapter = createEntityAdapter();
-const initialState = categoriesAdapter.getInitialState();
+console.log(+localStorage.getItem('categoryId'));
+const initialState = categoriesAdapter.getInitialState({
+    activeCategory: +localStorage.getItem('categoryId') ?? 1
+});
 
 export const fetchCategories = createAsyncThunk("categories/fetchCategories", async () => {
     const response = await http.get("/products/categories");
@@ -12,13 +15,19 @@ export const fetchCategories = createAsyncThunk("categories/fetchCategories", as
 const categoriesSlice = createSlice({
     name: 'categories',
     initialState,
-    reducers: {},
+    reducers: {
+        updateCategory(state, action) {
+            localStorage.setItem('categoryId', action.payload);
+        }
+    },
     extraReducers(builder) {
         builder.addCase(fetchCategories.fulfilled, (state, action) => {
             categoriesAdapter.setAll(state, action.payload);
         });
     }
 });
+
+export const {updateCategory} = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;
 export const {

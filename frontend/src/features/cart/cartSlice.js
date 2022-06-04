@@ -6,7 +6,6 @@ const cartAdapter = createEntityAdapter();
 const initialState = cartAdapter.getInitialState({
     ...cartItems,
     totalPrice: getCartTotalPrice(cartItems)
-
 });
 
 const cartSlice = createSlice({

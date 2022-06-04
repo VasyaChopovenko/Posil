@@ -1,14 +1,16 @@
 import Container from "react-bootstrap/Container";
 import {Button, Nav, Navbar} from "react-bootstrap";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAllCartItems} from "../features/cart/cartSlice"
-import {fetchCategories, selectAllCategories,} from "../features/categories/categoriesSlice";
+import {fetchCategories, selectAllCategories, updateCategory,} from "../features/categories/categoriesSlice";
 import {fetchProducts} from "../features/products/productsSlice";
 import {Dropdown} from "react-bootstrap";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import {useNavigate} from "react-router";
 
 export default function NavBar() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const cartItems = useSelector(selectAllCartItems);
     const cartItemsCount = cartItems.length;
@@ -21,15 +23,10 @@ export default function NavBar() {
         }
     });
 
-    const productsStatus = useSelector((state) => state.products.status);
-    useEffect(() => {
-        if (productsStatus === 'idle') {
-            dispatch(fetchProducts());
-        }
-    });
-
-    const onCategoryChanged = (categoryId) => {
-        console.log(categoryId);
+    const onCategoryChanged = async (categoryId) => {
+        dispatch(updateCategory(categoryId));
+        await dispatch(fetchProducts(categoryId));
+        navigate('/');
     };
 
     const categoryItems = categories.map(category => <Dropdown.Item key={category.id}
@@ -57,7 +54,7 @@ export default function NavBar() {
                     </Nav>
                 </Navbar.Collapse>
                 <Dropdown as={ButtonGroup} align="end" onSelect={onCategoryChanged}>
-                    <Button className="fs-5" variant="primary">Товари</Button>
+                    <Button className="fs-5" variant="primary" onClick={() => {navigate('/')}}>Товари</Button>
                     <Dropdown.Toggle split variant="primary" id="dropdown-split-basic"/>
                     <Dropdown.Menu>
                         {categoryItems}

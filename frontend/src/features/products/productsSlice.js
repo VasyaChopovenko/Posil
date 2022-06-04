@@ -2,16 +2,16 @@ import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolk
 import http from '../../http-common'
 
 const productsAdapter = createEntityAdapter();
-const products = getProductsFromState();
+// const products = getProductsFromState();
 const initialState = productsAdapter.getInitialState({
-    ...products,
+    // ...products,
     status: 'idle',
     error: null,
     updateStatus: 'idle'
 });
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async (categoryId) => {
-    const response = await http.get(`/products?categoryId=${categoryId}`);
+    const response = categoryId ? await http.get(`/products?categoryId=${categoryId}`) : await http.get(`/products`);
     return response.data;
 });
 
@@ -101,8 +101,8 @@ export const {
 
 export default productsSlice.reducer
 
-function getProductsFromState() {
-    const cart = localStorage.getItem('products');
-    return cart ? JSON.parse(cart) : {ids: [], entities: {}};
-}
+// function getProductsFromState() {
+//     const cart = localStorage.getItem('products');
+//     return cart ? JSON.parse(cart) : {ids: [], entities: {}};
+// }
 

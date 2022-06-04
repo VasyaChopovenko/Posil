@@ -17,22 +17,31 @@ export default function EditProductForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productId = useParams().productId;
+    const categoryId = useSelector(state => state.categories.activeCategory);
 
     useEffect(() => {
-        dispatch(fetchProductImage(product.id));
-    }, []);
+        if (!product) {
+            dispatch(fetchProducts(categoryId));
+        }
+    });
+
+    useEffect(() => {
+        if (product && !product.imgUrl) {
+            dispatch(fetchProductImage(product.id));
+        }
+    });
 
     const product = useSelector(state => selectProductById(state, productId));
 
     const [imgUrl, setImgUrl] = useState('');
-    const [img, setImg] = useState(product.imgUrl);
+    const [img, setImg] = useState(product?.imgUrl || '');
 
-    const [intPricePart, fracPricePart] = product.price.split('.');
+    const [intPricePart, fracPricePart] = product ? product.price.split('.') : [0, 0];
     const [integerPricePart, setIntegerPricePart] = useState(intPricePart);
     const [fractionalPricePart, setFractionalPricePart] = useState(fracPricePart);
-    const [name, setName] = useState(product.name);
-    const [count, setCount] = useState(product.count);
-    const [countDesc, setCountDesc] = useState(product.countDesc);
+    const [name, setName] = useState(product?.name || '');
+    const [count, setCount] = useState(product?.count || 0);
+    const [countDesc, setCountDesc] = useState(product?.countDesc || '');
 
     const [isLoading, setLoading] = useState(false);
 
@@ -90,7 +99,7 @@ export default function EditProductForm() {
         <Container>
             <div className="shadow-sm bg-white rounded m-1 pb-2">
                 <div className="d-flex bg-white">
-                    <img style={{maxWidth: '30rem', maxHeight: '30rem'}} src={imgUrl || product.imgUrl}/>
+                    <img style={{maxWidth: '30rem', maxHeight: '30rem'}} src={imgUrl || product?.imgUrl}/>
                     <div>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">
