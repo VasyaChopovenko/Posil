@@ -2,7 +2,6 @@ import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolk
 import http from '../../http-common';
 
 const categoriesAdapter = createEntityAdapter();
-console.log(+localStorage.getItem('categoryId'));
 const initialState = categoriesAdapter.getInitialState({
     activeCategory: +localStorage.getItem('categoryId') ?? 1
 });

@@ -21,7 +21,7 @@ export default function Counter(props) {
     };
 
     const onCounterChange = (event) => {
-        if (event < 1 && event) {
+        if ((event < 1 || event > props.maxValue) && event) {
             return;
         }
 

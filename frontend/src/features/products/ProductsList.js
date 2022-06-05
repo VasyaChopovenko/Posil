@@ -18,7 +18,7 @@ export function ProductsList() {
 
     const content = productsIds.map(productId => <Product key={productId} id={productId}/>);
 
-    if (content.length !== 0) {
+    if (content.length !== 0 && productsStatus === 'succeeded') {
         return (
             <div className="product_grid">
                 {content}

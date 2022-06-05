@@ -61,7 +61,7 @@ exports.findByIds = (req, res) => {
                 err.message || "Some error occurred while retrieving products."
         });
     });
-}
+};
 
 exports.findOne = (req, res) => {
     const productId = req.params.id;

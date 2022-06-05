@@ -44,14 +44,18 @@ export const addImage = createAsyncThunk('products/addProductImage', async({prod
 });
 
 export const deleteProduct = createAsyncThunk('products/deleteProduct', async(productId) => {
-    const response = await http.delete(`/products`);
+    const response = await http.delete(`/products/${productId}`);
     return productId;
 });
 
 const productsSlice = createSlice({
     name: 'products',
     initialState,
-    reducers: {},
+    reducers: {
+        setFetchIdleStatus(state, action) {
+            state.status = 'idle';
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(fetchProducts.pending, (state, action) => {
@@ -99,6 +103,8 @@ const productsSlice = createSlice({
 
     },
 });
+
+export const {setFetchIdleStatus} = productsSlice.actions;
 
 export const {
     selectIds: selectProductsIds,

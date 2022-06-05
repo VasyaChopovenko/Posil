@@ -1,9 +1,10 @@
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import React, {useState} from "react";
-import {addProduct} from "./productsSlice";
+import React, {useEffect, useState} from "react";
+import {addProduct, fetchProducts} from "./productsSlice";
 import {Container, Form, FormControl} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import {selectAllCategories} from "../categories/categoriesSlice";
 
 export default function AddNewProduct() {
     const navigate = useNavigate();
@@ -16,17 +17,23 @@ export default function AddNewProduct() {
     const [name, setName] = useState('');
     const [count, setCount] = useState(0);
     const [countDesc, setCountDesc] = useState('');
+    const [productCategory, setProductCategory] = useState(1);
+    const categories = useSelector(selectAllCategories);
 
     const allowSubmit = img && name && count && countDesc && integerPricePart;
 
     const onSaveProductClicked = async () => {
-        const newProduct = {name, price: `${integerPricePart}.${fractionalPricePart}`, count, countDesc};
+        const newProduct = {name, price: `${integerPricePart}.${fractionalPricePart}`, count, countDesc, category_id: productCategory};
         let formData = new FormData();
         formData.append('productImage', img);
         formData.append('product', JSON.stringify(newProduct));
 
         await dispatch(addProduct(formData));
         navigate(`/`);
+    };
+
+    const onCategoryChanged = (e) => {
+        setProductCategory(e.target.value);
     };
 
     const onIntegerPricePart = (e) => {
@@ -57,6 +64,9 @@ export default function AddNewProduct() {
         setImgUrl(URL.createObjectURL(e.target.files[0]));
     };
 
+    const categoryOptions = categories.map(category => <option key={category.id}
+                                                               value={category.id}>{category.name}</option>);
+
     return (
         <Container>
             <div className="shadow-sm bg-white rounded m-1 p-4">
@@ -71,6 +81,10 @@ export default function AddNewProduct() {
                             </Form.Group>
                             <Form.Label className="mt-2">Назва</Form.Label>
                             <FormControl value={name} onChange={onNameChanged}/>
+                            <Form.Label className="mt-2">Категорія</Form.Label>
+                            <Form.Select value={productCategory} onChange={onCategoryChanged}>
+                                {categoryOptions}
+                            </Form.Select>
                             <Form.Label className="mt-2">Ціна</Form.Label>
                             <div className="d-flex">
                                 <FormControl style={{width: '5rem'}} type="number" value={integerPricePart}
