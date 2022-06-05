@@ -42,10 +42,10 @@ export default function Counter(props) {
     };
 
     return (
-        <div className="d-flex justify-content-center align-content-stretch">
+        <div className="d-inline-flex align-content-stretch w-auto counter-container">
             <Button onClick={onDecrementClicked} variant="light" style={{zIndex: 10}}
                     className="counter_btn rounded-0 rounded-start border">-</Button>
-            <input type="number" className="no-spinner p-2 m-0 rounded-0 border counter_input w-25 text-center"
+            <input type="number" style={{width: '3rem'}} className="no-spinner p-2 m-0 rounded-0 border counter_input text-center"
                    onChange={(event) => onCounterChange(event.target.value)} value={value}
                    onBlur={(event => onBlur(+event.target.value))}/>
             <Button onClick={onIncrementClicked} variant="light" style={{zIndex: 10}}

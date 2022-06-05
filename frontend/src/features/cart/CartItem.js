@@ -30,15 +30,15 @@ export default function CartItem({itemId}) {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-evenly">
-            <img style={{width: '6rem'}} src={imgUrl}/>
-            <div style={{minWidth: '12rem', maxWidth: '12rem'}}>{cartItem.name}</div>
-            <div>{cartItem.countDesc}</div>
-            <div>{cartItem.price} грн</div>
+        <div className="d-md-flex align-items-center justify-content-evenly">
+            <img className="me-lg-4" style={{width: '6rem'}} src={imgUrl}/>
+            <div className="me-lg-4" style={{minWidth: '8rem', maxWidth: '8rem'}}>{cartItem.name}</div>
+            <div className="me-lg-4" style={{minWidth: '3rem', maxWidth: '5rem'}}>{cartItem.countDesc}</div>
+            <div className="me-lg-4" style={{minWidth: '6rem', maxWidth: '8rem'}}>{cartItem.price} грн</div>
             <Counter maxValue={cartItem.count} onChange={onCounterClicked}
                      defaultValue={cartItem.countInCart}/>
-            <Button onClick={onDeleteFromCartClicked}><i className="bi bi-trash3"/></Button>
-            <div style={{minWidth: '4rem', maxWidth: '4rem'}}>{cartItem.totalPrice} грн</div>
+            <Button className="ms-lg-4" onClick={onDeleteFromCartClicked}><i className="bi bi-trash3"/></Button>
+            <div className="ms-lg-4" style={{minWidth: '4rem', maxWidth: '4rem'}}>{cartItem.totalPrice} грн</div>
         </div>
     );
 }

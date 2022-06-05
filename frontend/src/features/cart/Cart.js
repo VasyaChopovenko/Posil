@@ -44,11 +44,11 @@ export default function Cart() {
     };
 
     return (
-        <section className="d-flex gap-2 m-2">
-            <ListGroup className="w-75 gap-2">
+        <section className="d-lg-flex gap-2 m-2">
+            <ListGroup className="w-100 gap-2">
                 {cartItems}
             </ListGroup>
-            <Card style={{top: '1%'}} className="w-25 position-sticky h-75 shadow-sm">
+            <Card style={{top: '1%', minWidth: '25%'}} className="position-sticky h-75 shadow-sm">
                 <Card.Body className="d-flex mt-2 flex-column">
                     <div>
                         <div>Доставка: 49.00 грн</div>

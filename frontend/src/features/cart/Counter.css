@@ -17,3 +17,7 @@ input[type=number]::-webkit-outer-spin-button {
 .counter_btn:hover {
     background-color: darkgray;
 }
+
+.counter-container {
+    width: min-content !important;
+}
