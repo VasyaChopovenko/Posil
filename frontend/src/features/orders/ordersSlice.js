@@ -27,6 +27,7 @@ const ordersSlice = createSlice({
 });
 
 export const {
+    selectAll: selectAllOrders,
     selectIds: selectAllOrdersIds,
     selectById: selectOrderById
 } = ordersAdapter.getSelectors(state => state.orders);

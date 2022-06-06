@@ -4,13 +4,11 @@ import React from "react";
 
 export default function OrderItem({productId, itemCount}) {
     const product = useSelector(state => selectProductById(state, productId));
-    console.log(productId);
-
 
     if (product) {
         return (
             <div>
-                <p>{product.name} | {itemCount} x {product.countDesc}</p>
+                <p className="m-0">{product.name} | {itemCount} x {product.countDesc}</p>
             </div>
         );
     } else {

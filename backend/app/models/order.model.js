@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
 
     return Order.init({
         status: {
-            type: DataTypes.ENUM('Pending', 'In Progress', 'Delivered'),
-            defaultValue: 'Pending'
+            type: DataTypes.ENUM('Новий', 'В процесі', 'Виконано'),
+            defaultValue: 'Новий'
         },
         clientAddress: {
             type: DataTypes.STRING,
