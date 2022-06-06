@@ -99,7 +99,7 @@ export default function Cart() {
                                       style={{minHeight: '8rem', maxHeight: '20rem'}}/>
                     </Form.Group>
                     <Button onClick={onOrderConfirmed} variant="primary" className="m-auto mt-4"
-                            disabled={addressError || !address || cartItemsIds.length === 0}>Замовити</Button>
+                            disabled={addressError || !address || phoneError || cartItemsIds.length === 0}>Замовити</Button>
                 </Card.Body>
             </Card>
         </section>
