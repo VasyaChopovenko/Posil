@@ -16,10 +16,18 @@ module.exports = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.ENUM('Pending', 'In Progress', 'Delivered'),
             defaultValue: 'Pending'
+        },
+        clientAddress: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        clientPhone: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
         sequelize,
         tableName: 'order',
-        timestamps: false
+        createdAt: true
     });
 };

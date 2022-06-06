@@ -9,6 +9,7 @@ import {Route, } from 'react-router-dom';
 import Cart from "./features/cart/Cart";
 import EditProductForm from "./features/products/EditProductForm";
 import AddNewProduct from "./features/products/AddNewProduct";
+import OrdersList from "./features/orders/OrdersList";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -29,6 +30,7 @@ export default class App extends React.Component {
                     <Route exact path="/cart" element={<Cart/>}/>
                     <Route exact path="/products/:productId" element={<EditProductForm/>}/>
                     <Route exact path="/products/add" element={<AddNewProduct/>}/>
+                    <Route exact path="/orders" element={<OrdersList/>}/>
                 </Routes>
             </BrowserRouter>
         );

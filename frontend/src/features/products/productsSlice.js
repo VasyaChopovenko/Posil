@@ -97,16 +97,16 @@ const productsSlice = createSlice({
                 productsAdapter.removeOne(state, action.payload);
             })
             .addCase(fetchProductsByIds.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 productsAdapter.setAll(state, action.payload);
             })
-
-
     },
 });
 
 export const {setFetchIdleStatus} = productsSlice.actions;
 
 export const {
+    selectAll: selectAllProducts,
     selectIds: selectProductsIds,
     selectById: selectProductById
 } = productsAdapter.getSelectors(state => state.products);

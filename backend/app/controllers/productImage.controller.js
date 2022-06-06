@@ -43,7 +43,6 @@ exports.findOne = (req, res) => {
     const productId = req.params.id;
     ProductImage.findOne({where: {product_id: productId}})
         .then(data => {
-            // res.set('Content-Type', data.mimetype);
             res.set('Content-Disposition', 'attachment; filename=' + data.name);
             res.send(data.content);
         })

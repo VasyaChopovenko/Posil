@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     deleteProduct,
     fetchProductImage,
-    fetchProducts,
+    fetchProductsByIds,
     selectProductById, setFetchIdleStatus,
     updateProduct,
     updateProductImage
@@ -18,12 +18,11 @@ export default function EditProductForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productId = useParams().productId;
-    const categoryId = useSelector(state => state.categories.activeCategory);
     const categories = useSelector(selectAllCategories);
 
     useEffect(() => {
         if (!product) {
-            dispatch(fetchProducts(categoryId));
+            dispatch(fetchProductsByIds({"ids": productId}));
         }
     });
 
@@ -36,7 +35,7 @@ export default function EditProductForm() {
     const product = useSelector(state => selectProductById(state, productId));
 
     const [imgUrl, setImgUrl] = useState('');
-    const [img, setImg] = useState(product?.imgUrl || '');
+    const [img, setImg] = useState('');
 
     const [integerPricePart, setIntegerPricePart] = useState(0);
     const [fractionalPricePart, setFractionalPricePart] = useState(0);
