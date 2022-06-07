@@ -39,13 +39,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DECIMAL(7, 2),
             allowNull: false,
         },
-        published: {
+        weighable: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        active: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
+        minAmount: {
+            type: DataTypes.REAL,
+            defaultValue: 1.0
         }
     }, {
         sequelize,

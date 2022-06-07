@@ -1,5 +1,5 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolkit";
-import {updateProduct} from "../products/productsSlice";
+import {updateProduct, deleteProduct} from "../products/productsSlice";
 import http from "../../http-common";
 
 const cartItems = getCartItems();

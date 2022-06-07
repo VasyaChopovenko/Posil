@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
     return OrderItem.init({
         count: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.REAL,
             allowNull: false
         }
     }, {

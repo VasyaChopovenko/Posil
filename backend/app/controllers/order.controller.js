@@ -1,6 +1,5 @@
 const db = require("../models");
 const Order = db.Order;
-const OrderItem = db.OrderItem;
 
 exports.create = (req, res) => {
     Order.create({
@@ -19,7 +18,7 @@ exports.update = (req, res) => {
         where: {
             id: req.body.id
         }
-    }).then(data => res.send(data)).catch(err => {
+    }).then(Order.findByPk(req.body.id).then(data => res.send(data))).catch(err => {
         res.status(500).send({
             message:
                 err.message || "Some error occurred while updating order."

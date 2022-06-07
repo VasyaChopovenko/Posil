@@ -36,7 +36,7 @@ export default function CartItem({itemId}) {
             <div className="me-lg-4" style={{minWidth: '3rem', maxWidth: '5rem'}}>{cartItem.countDesc}</div>
             <div className="me-lg-4" style={{minWidth: '6rem', maxWidth: '8rem'}}>{cartItem.price} грн</div>
             <Counter maxValue={cartItem.count} onChange={onCounterClicked}
-                     defaultValue={cartItem.countInCart}/>
+                     defaultValue={cartItem.countInCart} weighable={cartItem.weighable} minAmount={cartItem.minAmount}/>
             <Button className="ms-lg-4" onClick={onDeleteFromCartClicked}><i className="bi bi-trash3"/></Button>
             <div className="ms-lg-4" style={{minWidth: '4rem', maxWidth: '4rem'}}>{cartItem.totalPrice} грн</div>
         </div>

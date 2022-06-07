@@ -1,10 +1,11 @@
 import React from "react";
-import {useSelector} from "react-redux";
-import {selectOrderById} from "./ordersSlice";
-import {Accordion} from "react-bootstrap";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchOrders, selectOrderById, updateOrderStatus} from "./ordersSlice";
+import {Accordion, Button} from "react-bootstrap";
 import OrderItem from "./OrderItem";
 
 export default function Order({id}) {
+    const dispatch = useDispatch();
     const order = useSelector(state => selectOrderById(state, id));
 
     const getCreationDate = (creationDate) => {
@@ -14,6 +15,12 @@ export default function Order({id}) {
 
     const orderItems = order.items.map(item => <OrderItem key={item.id} productId={item.product_id}
                                                           itemCount={item.count}/>);
+
+    const onUpdateStatusClicked = async () => {
+        const newStatus = order.status === 'Нове' ? 'В процесі' : 'Виконано';
+        await dispatch(updateOrderStatus({id: order.id, status: newStatus}));
+        dispatch(fetchOrders());
+    };
 
     return (
         <Accordion.Item eventKey={order.id}>
@@ -29,6 +36,8 @@ export default function Order({id}) {
             </Accordion.Header>
             <Accordion.Body>
                 {orderItems}
+                {order.status === 'Виконано' || <Button className="mt-2" onClick={onUpdateStatusClicked}>Оновити
+                    до {order.status === 'Нове' ? '\"В процесі\"' : '\"Виконано\"'}</Button>}
             </Accordion.Body>
         </Accordion.Item>
     );

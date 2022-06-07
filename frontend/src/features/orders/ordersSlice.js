@@ -12,6 +12,11 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
     return response.data;
 });
 
+export const updateOrderStatus = createAsyncThunk('orders/updateOrderStatus', async (body) => {
+    const response = await http.put('orders', body);
+    return response.data;
+});
+
 const ordersSlice = createSlice({
     name: 'cart',
     initialState,
@@ -22,6 +27,9 @@ const ordersSlice = createSlice({
                 state.fetchStatus = 'succeeded';
                 ordersAdapter.setAll(state, action.payload);
                 state.productsIds = [...new Set(Object.values(state.entities).reduce((accumulator, current) => accumulator.concat(current.items.map(item => item.product_id)), []))];
+            })
+            .addCase(updateOrderStatus.fulfilled, (state, action) => {
+                ordersAdapter.upsertOne(state, action.payload);
             })
     }
 });

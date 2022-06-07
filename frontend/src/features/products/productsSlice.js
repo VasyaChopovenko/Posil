@@ -45,7 +45,7 @@ export const addImage = createAsyncThunk('products/addProductImage', async({prod
 
 export const deleteProduct = createAsyncThunk('products/deleteProduct', async(productId) => {
     const response = await http.delete(`/products/${productId}`);
-    return productId;
+    return response.data;
 });
 
 const productsSlice = createSlice({
@@ -94,6 +94,8 @@ const productsSlice = createSlice({
                 productsAdapter.setOne(state, action.payload);
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {
+                console.log(action.payload);
+                console.log(state);
                 productsAdapter.removeOne(state, action.payload);
             })
             .addCase(fetchProductsByIds.fulfilled, (state, action) => {

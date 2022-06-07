@@ -36,15 +36,18 @@ export default function EditProductForm() {
 
     const [imgUrl, setImgUrl] = useState('');
     const [img, setImg] = useState('');
-
     const [integerPricePart, setIntegerPricePart] = useState(0);
     const [fractionalPricePart, setFractionalPricePart] = useState(0);
     const [name, setName] = useState(product ? product.name : '');
     const [count, setCount] = useState(product?.count || 0);
     const [countDesc, setCountDesc] = useState(product?.countDesc || '');
     const [productCategory, setProductCategory] = useState(1);
+    const [minAmount, setMinAmount] = useState(product?.minAmount || 0);
+    const [minAmountError, setMinAmountError] = useState('');
 
     const [isLoading, setLoading] = useState(false);
+
+    const allowSubmit =  name && count && countDesc && integerPricePart && !minAmountError;
 
     useEffect(() => {
         if (product) {
@@ -56,13 +59,21 @@ export default function EditProductForm() {
             setCount(product.count);
             setCountDesc(product.countDesc);
             setProductCategory(product.category_id);
+            setMinAmount(product.minAmount);
         }
     }, [product]);
 
     const onSaveProductClicked = async () => {
         setLoading(true);
         await dispatch(updateProduct({
-            ...product, price: `${integerPricePart}.${fractionalPricePart}`, count, name, category_id: productCategory
+            id: product.id,
+            name,
+            price: `${integerPricePart}.${fractionalPricePart}`,
+            count: +count,
+            countDesc,
+            category_id: productCategory,
+            weighable: product.weighable,
+            minAmount
         }));
         if (img) {
             await updateImage();
@@ -79,11 +90,13 @@ export default function EditProductForm() {
     };
 
     const onIntegerPricePart = (e) => {
-        setIntegerPricePart(e.target.value);
+        if (e.target.value >= 0 && !e.target.value.includes('.')) {
+            setIntegerPricePart(e.target.value);
+        }
     };
 
     const onFractionalPricePart = (e) => {
-        if (e.target.value <= 99) {
+        if (e.target.value <= 99 && e.target.value >= 0 && !e.target.value.includes('.')) {
             setFractionalPricePart(e.target.value);
         }
     };
@@ -111,8 +124,25 @@ export default function EditProductForm() {
 
     const onDeleteProductClicked = () => {
         dispatch(deleteProduct(productId));
-        navigate(`/`);
     };
+
+    const onMinAmountChanged = (e) => {
+        if (e.target.value >= 0) {
+            setMinAmount(e.target.value);
+        }
+    };
+
+    const onMinAmountBlur = (e) => {
+        if (e.target.value <= 0) {
+            setMinAmountError('Мінімальна кількість не може = 0');
+        } else {
+            setMinAmountError('');
+        }
+    };
+
+    const minAmountElem = <div><Form.Label className="mt-2">{minAmountError ?
+        <div style={{color: "red"}}>{minAmountError}</div> : 'Мінімальна кількість при додаванні в корзину (у кілограмах):'}</Form.Label>
+        <FormControl disabled type="number" value={minAmount} onBlur={onMinAmountBlur} onChange={onMinAmountChanged}/></div>;
 
     const categoryOptions = categories.map(category => <option key={category.id}
                                                                value={category.id}>{category.name}</option>);
@@ -121,12 +151,15 @@ export default function EditProductForm() {
             <div className="shadow-sm bg-white rounded m-1 pb-2">
                 <div className="d-flex bg-white">
                     <img style={{minWidth: '30rem', maxHeight: '30rem'}} src={imgUrl || img}/>
-                    <div>
+                    <div style={{width: '40%'}}>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">
                                 <Form.Label>Виберіть нове фото</Form.Label>
                                 <Form.Control type="file" onChange={onFileChosen}/>
                             </Form.Group>
+                            <Form.Check className="mt-2"
+                                        type='checkbox' checked={product?.weighable || false} label="Ваговий товар" disabled
+                            />
                             <Form.Label className="mt-2">Назва</Form.Label>
                             <FormControl value={name} onChange={onNameChanged}/>
                             <Form.Label className="mt-2">Категорія</Form.Label>
@@ -146,14 +179,15 @@ export default function EditProductForm() {
                             <FormControl type="number" value={count} onChange={onCountChanged}/>
                             <Form.Label className="mt-2">Опис кількості:</Form.Label>
                             <FormControl value={countDesc} onChange={onCountDescChanged}/>
+                            {product?.weighable && minAmountElem}
                         </Form>
                         <div className="d-flex justify-content-between">
-                            <Button disabled={isLoading} type="button" className="mt-3"
+                            <Button disabled={!allowSubmit || isLoading} type="button" className="mt-3"
                                     onClick={onSaveProductClicked}>
                                 Зберегти
                             </Button>
                             <Button disabled={isLoading} type="button" variant="danger" className="mt-3"
-                                    onClick={onDeleteProductClicked}>
+                                    onClick={onDeleteProductClicked} href="/">
                                 Видалити
                             </Button>
                         </div>

@@ -84,7 +84,7 @@ export default function Cart() {
                 <Card.Body className="d-flex mt-2 flex-column">
                     <div className="mb-2">
                         <div>Доставка: 49.00 грн</div>
-                        <div className="mt-2 fw-bold">Всього: {totalPrice + 49} грн</div>
+                        <div className="mt-2 fw-bold">Всього: {(totalPrice + 49).toFixed(2)} грн</div>
                     </div>
                     <Form.Group className="mb-3">
                         <Form.Label>{phoneError ?

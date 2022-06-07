@@ -21,11 +21,11 @@ export default function Product({id}) {
     });
 
     const onAddToCartClicked = async () => {
-        await dispatch(addToCart({...product, countInCart: 1}));
+        await dispatch(addToCart({...product, countInCart: product.minAmount}));
     };
 
     const addToCartButton = !cartItem ?
-        <Button onClick={onAddToCartClicked} variant="primary"><i className="bi bi-cart-plus"/> У кошик</Button> :
+        <Button disabled={product.count === 0} onClick={onAddToCartClicked} variant="primary"><i className="bi bi-cart-plus"/>{product.count === 0 ? 'Немає в наявності' : 'У кошик'}</Button> :
         <Button disabled variant="primary"><i className="bi bi-cart-check"/> Додано</Button>;
 
     return (

@@ -4,50 +4,32 @@ import "./Counter.css"
 
 export default function Counter(props) {
     let [value, setValue] = useState(props.defaultValue);
-    let [oldValue, setOldValue] = useState(props.defaultValue);
+    let minAmount = props.minAmount;
 
     const onIncrementClicked = () => {
-        if (value < props.maxValue) {
-            setValue(++value);
-            props.onChange(+value);
+        const newValue = value + minAmount;
+        if (newValue <= props.maxValue) {
+            setValue(+newValue.toFixed(1));
+            props.onChange(+newValue.toFixed(1));
         }
     };
 
     const onDecrementClicked = () => {
-        if (value > 1) {
-            setValue(--value);
-            props.onChange(+value);
+        const newValue = value - minAmount;
+        if (newValue >= minAmount) {
+            setValue(+newValue.toFixed(1));
+            props.onChange(+newValue.toFixed(1));
         }
-    };
-
-    const onCounterChange = (event) => {
-        if ((event < 1 || event > props.maxValue) && event) {
-            return;
-        }
-
-        if (event) {
-            setOldValue(event);
-        }
-
-        setValue(event);
-    };
-
-    const onBlur = (event) => {
-        if (!event) {
-            setValue(oldValue);
-            props.onChange(+oldValue);
-            return;
-        }
-        props.onChange(+value);
     };
 
     return (
-        <div className="d-inline-flex align-content-stretch w-auto counter-container">
+        <div className="d-inline-flex justify-content-center align-content-stretch w-auto counter-container">
             <Button onClick={onDecrementClicked} variant="light" style={{zIndex: 10}}
                     className="counter_btn rounded-0 rounded-start border">-</Button>
-            <input type="number" style={{width: '3rem'}} className="no-spinner p-2 m-0 rounded-0 border counter_input text-center"
-                   onChange={(event) => onCounterChange(event.target.value)} value={value}
-                   onBlur={(event => onBlur(+event.target.value))}/>
+            <div className="d-flex border-1 border"><input disabled type="number" style={{width: '3rem'}}
+                                                           className="no-spinner bg-white border-0 p-2 m-0 rounded-0 border counter_input text-center"
+                                                           value={value}/>
+                {props.weighable && <span className="p-2">кг</span>}</div>
             <Button onClick={onIncrementClicked} variant="light" style={{zIndex: 10}}
                     className="counter_btn rounded-0 rounded-end border">+</Button>
         </div>

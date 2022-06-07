@@ -46,7 +46,7 @@ export default function OrdersList() {
                 </Accordion>
             </Accordion.Body>
         </Accordion.Item>)
-    }) : <div>test</div>;
+    }) : <div/>;
 
     return (
         <Container>

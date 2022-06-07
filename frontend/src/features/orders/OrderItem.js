@@ -12,6 +12,6 @@ export default function OrderItem({productId, itemCount}) {
             </div>
         );
     } else {
-        return <div>empty</div>
+        return <div>Позиція видалена</div>
     }
 }
