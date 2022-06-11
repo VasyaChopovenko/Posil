@@ -26,6 +26,7 @@ export default function CartItem({itemId}) {
     };
 
     const onCounterClicked = (value) => {
+        console.log(value);
         dispatch(updateCartItem({...cartItem, countInCart: value}));
     };
 
@@ -35,8 +36,8 @@ export default function CartItem({itemId}) {
             <div className="me-lg-4" style={{minWidth: '8rem', maxWidth: '8rem'}}>{cartItem.name}</div>
             <div className="me-lg-4" style={{minWidth: '3rem', maxWidth: '5rem'}}>{cartItem.countDesc}</div>
             <div className="me-lg-4" style={{minWidth: '6rem', maxWidth: '8rem'}}>{cartItem.price} грн</div>
-            <Counter maxValue={cartItem.count} onChange={onCounterClicked}
-                     defaultValue={cartItem.countInCart} weighable={cartItem.weighable} minAmount={cartItem.minAmount}/>
+            <Counter count={cartItem.count} onChange={onCounterClicked}
+                     countInCart={cartItem.countInCart} weighable={cartItem.weighable} minAmount={cartItem.minAmount}/>
             <Button className="ms-lg-4" onClick={onDeleteFromCartClicked}><i className="bi bi-trash3"/></Button>
             <div className="ms-lg-4" style={{minWidth: '4rem', maxWidth: '4rem'}}>{cartItem.totalPrice} грн</div>
         </div>

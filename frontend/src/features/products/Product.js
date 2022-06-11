@@ -21,7 +21,7 @@ export default function Product({id}) {
     });
 
     const onAddToCartClicked = async () => {
-        await dispatch(addToCart({...product, countInCart: product.minAmount}));
+        await dispatch(addToCart({...product, countInCart: product.count < product.minAmount ? product.count : product.minAmount}));
     };
 
     const addToCartButton = !cartItem ?

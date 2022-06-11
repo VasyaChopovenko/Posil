@@ -22,7 +22,7 @@ export default function EditProductForm() {
 
     useEffect(() => {
         if (!product) {
-            dispatch(fetchProductsByIds({"ids": productId}));
+            dispatch(fetchProductsByIds({"ids": [productId]}));
         }
     });
 
@@ -40,6 +40,7 @@ export default function EditProductForm() {
     const [fractionalPricePart, setFractionalPricePart] = useState(0);
     const [name, setName] = useState(product ? product.name : '');
     const [count, setCount] = useState(product?.count || 0);
+    const [countError, setCountError] = useState('');
     const [countDesc, setCountDesc] = useState(product?.countDesc || '');
     const [productCategory, setProductCategory] = useState(1);
     const [minAmount, setMinAmount] = useState(product?.minAmount || 0);
@@ -47,7 +48,7 @@ export default function EditProductForm() {
 
     const [isLoading, setLoading] = useState(false);
 
-    const allowSubmit =  name && count && countDesc && integerPricePart && !minAmountError;
+    const allowSubmit = name && count && countDesc && integerPricePart && !countError && !minAmountError;
 
     useEffect(() => {
         if (product) {
@@ -68,7 +69,7 @@ export default function EditProductForm() {
         await dispatch(updateProduct({
             id: product.id,
             name,
-            price: `${integerPricePart}.${fractionalPricePart}`,
+            price: `${integerPricePart}.${fractionalPricePart ? fractionalPricePart : '0'}`,
             count: +count,
             countDesc,
             category_id: productCategory,
@@ -106,7 +107,22 @@ export default function EditProductForm() {
     };
 
     const onCountChanged = (e) => {
-        setCount(e.target.value);
+        const newCount = e.target.value;
+        setCount(newCount);
+
+        if (newCount <= 0) {
+            setCountError('Кількість не можи бути меншою або дорівнювати нулю');
+        } else if (!Number.isInteger(+newCount) && !product.weighable) {
+            setCountError('Кількість невагового товару не може бути дробовим числом');
+        } else {
+            setCountError('');
+        }
+
+        if (product.weighable && minAmount > newCount) {
+            setMinAmountError('Мінімальна кількість не може бути більшою за наявну');
+        } else {
+            setMinAmountError('');
+        }
     };
 
     const onCountDescChanged = (e) => {
@@ -126,23 +142,13 @@ export default function EditProductForm() {
         dispatch(deleteProduct(productId));
     };
 
-    const onMinAmountChanged = (e) => {
-        if (e.target.value >= 0) {
-            setMinAmount(e.target.value);
-        }
-    };
-
-    const onMinAmountBlur = (e) => {
-        if (e.target.value <= 0) {
-            setMinAmountError('Мінімальна кількість не може = 0');
-        } else {
-            setMinAmountError('');
-        }
-    };
-
-    const minAmountElem = <div><Form.Label className="mt-2">{minAmountError ?
-        <div style={{color: "red"}}>{minAmountError}</div> : 'Мінімальна кількість при додаванні в корзину (у кілограмах):'}</Form.Label>
-        <FormControl disabled type="number" value={minAmount} onBlur={onMinAmountBlur} onChange={onMinAmountChanged}/></div>;
+    const minAmountElem =
+        <Form.Group>
+            {!minAmountError ?
+                <Form.Label className="mt-2">Мінімальна кількість при додаванні в корзину (у кілограмах):</Form.Label> :
+                <Form.Label style={{color: 'red'}} className="mt-2">{minAmountError}</Form.Label>}
+            <FormControl disabled type="number" value={minAmount}/>
+        </Form.Group>;
 
     const categoryOptions = categories.map(category => <option key={category.id}
                                                                value={category.id}>{category.name}</option>);
@@ -150,7 +156,8 @@ export default function EditProductForm() {
         <Container>
             <div className="shadow-sm bg-white rounded m-1 pb-2">
                 <div className="d-flex bg-white">
-                    <img style={{minWidth: '30rem', maxHeight: '30rem'}} src={imgUrl || img}/>
+                    <img style={{maxWidth: '30rem', maxHeight: '30rem'}} className="p-4 w-auto h-auto"
+                         src={imgUrl || img}/>
                     <div style={{width: '40%'}}>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">
@@ -158,27 +165,40 @@ export default function EditProductForm() {
                                 <Form.Control type="file" onChange={onFileChosen}/>
                             </Form.Group>
                             <Form.Check className="mt-2"
-                                        type='checkbox' checked={product?.weighable || false} label="Ваговий товар" disabled
+                                        type='checkbox' checked={product?.weighable || false} label="Ваговий товар"
+                                        disabled
                             />
-                            <Form.Label className="mt-2">Назва</Form.Label>
-                            <FormControl value={name} onChange={onNameChanged}/>
-                            <Form.Label className="mt-2">Категорія</Form.Label>
-                            <Form.Select value={productCategory} onChange={onCategoryChanged}>
-                                {categoryOptions}
-                            </Form.Select>
-                            <Form.Label className="mt-2">Ціна</Form.Label>
-                            <div className="d-flex">
-                                <FormControl style={{width: '5rem'}} type="number" value={integerPricePart}
-                                             onChange={onIntegerPricePart}/>
-                                <span className="align-self-end fs-2 ms-2 me-2">.</span>
-                                <FormControl style={{width: '5rem'}} type="number" value={fractionalPricePart}
-                                             onChange={onFractionalPricePart}/>
-                                <span className="align-self-end ms-2 me-2">грн</span>
-                            </div>
-                            <Form.Label className="mt-2">Наявна кількість:</Form.Label>
-                            <FormControl type="number" value={count} onChange={onCountChanged}/>
-                            <Form.Label className="mt-2">Опис кількості:</Form.Label>
-                            <FormControl value={countDesc} onChange={onCountDescChanged}/>
+                            <Form.Group>
+                                <Form.Label className="mt-2">Назва</Form.Label>
+                                <FormControl value={name} onChange={onNameChanged}/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label className="mt-2">Категорія</Form.Label>
+                                <Form.Select value={productCategory} onChange={onCategoryChanged}>
+                                    {categoryOptions}
+                                </Form.Select>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label className="mt-2">Ціна</Form.Label>
+                                <div className="d-flex">
+                                    <FormControl style={{width: '5rem'}} type="number" value={integerPricePart}
+                                                 onChange={onIntegerPricePart}/>
+                                    <span className="align-self-end fs-2 ms-2 me-2">.</span>
+                                    <FormControl style={{width: '5rem'}} type="number" value={fractionalPricePart}
+                                                 onChange={onFractionalPricePart}/>
+                                    <span className="align-self-end ms-2 me-2">грн</span>
+                                </div>
+                            </Form.Group>
+                            <Form.Group>
+                                {!countError ? <Form.Label className="mt-2">Наявна
+                                        кількість{product?.weighable ? ' (у кілограмах)' : ''}:</Form.Label> :
+                                    <Form.Label className="mt-2" style={{color: 'red'}}>{countError}:</Form.Label>}
+                                <FormControl type="number" value={count} onChange={onCountChanged}/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label className="mt-2">Опис кількості:</Form.Label>
+                                <FormControl value={countDesc} onChange={onCountDescChanged}/>
+                            </Form.Group>
                             {product?.weighable && minAmountElem}
                         </Form>
                         <div className="d-flex justify-content-between">

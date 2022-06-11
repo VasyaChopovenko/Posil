@@ -25,38 +25,30 @@ export default function Cart() {
     });
 
     const onPhoneChanged = (e) => {
-        if (e.target.value.length > 10) {
-            setPhoneError('Номер не може перевищувати 10 цифр');
-        } else if (isNaN(e.target.value)) {
-            setPhoneError('Номер не містить букв');
-        } else {
-            setPhoneError('');
-            setPhone(e.target.value);
+        const phoneInput = e.target.value;
+
+        if (phoneInput.length <= 10) {
+            setPhone(phoneInput);
+
+            if (isNaN(phoneInput)) {
+                setPhoneError('Номер не повинен містити букви');
+            } else {
+                setPhoneError('');
+            }
+
+            if (phoneInput.length !== 10) {
+                setPhoneError('Номер має містити 10 цифер');
+            }
         }
     };
 
     const onAddressChanged = (e) => {
-        if (e.target.value.length > 200) {
+        const addressInput = e.target.value;
+        setAddress(addressInput);
+        if (addressInput.length > 150) {
             setAddressError('Адреса не може бути довшою ніж 200 символів');
         } else {
             setAddressError('');
-            setAddress(e.target.value);
-        }
-    };
-
-    const onPhoneBlur = (e) => {
-        if (e.target.value.length === 10) {
-            setPhoneError('');
-        } else {
-            setPhoneError('Введіть коректний номер');
-        }
-    };
-
-    const onAddressBlur = (e) => {
-        if (e.target.value.length <= 200) {
-            setAddressError('');
-        } else {
-            setAddressError('Введіть коректну адресу');
         }
     };
 
@@ -89,13 +81,13 @@ export default function Cart() {
                     <Form.Group className="mb-3">
                         <Form.Label>{phoneError ?
                             <div style={{color: "red"}}>{phoneError}</div> : 'Додайте номер телефону:'}</Form.Label>
-                        <Form.Control onBlur={onPhoneBlur} value={phone} onChange={onPhoneChanged}
+                        <Form.Control value={phone} onChange={onPhoneChanged}
                                       placeholder="Без +(38)"/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>{addressError ?
                             <div style={{color: "red"}}>{addressError}</div> : 'Додайте адресу:'}</Form.Label>
-                        <Form.Control value={address} onBlur={onAddressBlur} onChange={onAddressChanged} as="textarea"
+                        <Form.Control value={address} onChange={onAddressChanged} as="textarea"
                                       style={{minHeight: '8rem', maxHeight: '20rem'}}/>
                     </Form.Group>
                     <Button onClick={onOrderConfirmed} variant="primary" className="m-auto mt-4"
