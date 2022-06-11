@@ -9,8 +9,9 @@ import {Link} from "react-router-dom";
 
 export default function Product({id}) {
     const product = useSelector(state => selectProductById(state, id));
-    const priceBeforePoint = product.price.toString().split('.')[0];
-    const priceAfterPoint = product.price.toString().split('.')[1];
+    const pricePerMinAmount = (product.price * product.minAmount).toFixed(2);
+    const priceBeforePoint = pricePerMinAmount.toString().split('.')[0];
+    const priceAfterPoint = pricePerMinAmount.toString().split('.')[1];
     const dispatch = useDispatch();
     const cartItem = useSelector(state => selectCartItemById(state, id));
 

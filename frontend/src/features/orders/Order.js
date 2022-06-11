@@ -19,7 +19,6 @@ export default function Order({id}) {
     const onUpdateStatusClicked = async () => {
         const newStatus = order.status === 'Нове' ? 'В процесі' : 'Виконано';
         await dispatch(updateOrderStatus({id: order.id, status: newStatus}));
-        dispatch(fetchOrders());
     };
 
     return (
@@ -30,7 +29,7 @@ export default function Order({id}) {
                        className="mb-0 me-5">{getCreationDate(order.createdAt).toString().split(', ')[1]}</p>
                     <p style={{minWidth: '7rem', maxWidth: '7rem'}} className="mb-0 me-5">{order.status}</p>
                     <p style={{minWidth: '28rem', maxWidth: '28rem'}}
-                       className="mb-0 me-5">{order.clientAddress}</p>
+                       className="mb-0 me-5 overflow-scroll">{order.clientAddress}</p>
                     <p style={{minWidth: '10rem', maxWidth: '10rem'}} className="mb-0 me-5">{order.clientPhone}</p>
                 </div>
             </Accordion.Header>

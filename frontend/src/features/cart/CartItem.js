@@ -34,7 +34,7 @@ export default function CartItem({itemId}) {
         <div className="d-md-flex align-items-center justify-content-evenly">
             <img className="me-lg-4" style={{width: '6rem'}} src={imgUrl}/>
             <div className="me-lg-4" style={{minWidth: '8rem', maxWidth: '8rem'}}>{cartItem.name}</div>
-            <div className="me-lg-4" style={{minWidth: '3rem', maxWidth: '5rem'}}>{cartItem.countDesc}</div>
+            <div className="me-lg-4" style={{minWidth: '3rem', maxWidth: '5rem'}}>{cartItem.weighable ? 'кг' : cartItem.countDesc}</div>
             <div className="me-lg-4" style={{minWidth: '6rem', maxWidth: '8rem'}}>{cartItem.price} грн</div>
             <Counter count={cartItem.count} onChange={onCounterClicked}
                      countInCart={cartItem.countInCart} weighable={cartItem.weighable} minAmount={cartItem.minAmount}/>

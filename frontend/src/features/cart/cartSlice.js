@@ -22,7 +22,7 @@ const cartSlice = createSlice({
             const cartItem = action.payload;
             cartAdapter.addOne(state, {
                 ...cartItem,
-                totalPrice: cartItem.price
+                totalPrice: (+cartItem.countInCart * cartItem.price).toFixed(2)
             });
             state.totalPrice = getCartTotalPrice(state);
             localStorage.setItem('cart', JSON.stringify(state));

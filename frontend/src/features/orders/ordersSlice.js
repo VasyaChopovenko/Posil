@@ -14,7 +14,7 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
 
 export const updateOrderStatus = createAsyncThunk('orders/updateOrderStatus', async (body) => {
     const response = await http.put('orders', body);
-    return response.data;
+    return response.data[1][0];
 });
 
 const ordersSlice = createSlice({

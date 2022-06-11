@@ -142,17 +142,17 @@ export default function AddNewProduct() {
                                         type='checkbox' value={weighable} label="Ваговий товар" onChange={onBoxChecked}
                             />
                             <Form.Group>
-                                <Form.Label className="mt-2">Назва</Form.Label>
+                                <Form.Label className="mt-2">Назва:</Form.Label>
                                 <FormControl value={name} onChange={onNameChanged}/>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label className="mt-2">Категорія</Form.Label>
+                                <Form.Label className="mt-2">Категорія:</Form.Label>
                                 <Form.Select value={productCategory} onChange={onCategoryChanged}>
                                     {categoryOptions}
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label className="mt-2">Ціна</Form.Label>
+                                <Form.Label className="mt-2">Ціна{weighable && ' (за кілограм)'}:</Form.Label>
                                 <div className="d-flex">
                                     <FormControl style={{width: '5rem'}} type="number" value={integerPricePart}
                                                  onChange={onIntegerPricePart}/>

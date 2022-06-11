@@ -17,8 +17,9 @@ exports.update = (req, res) => {
     Order.update(req.body, {
         where: {
             id: req.body.id
-        }
-    }).then(Order.findByPk(req.body.id).then(data => res.send(data))).catch(err => {
+        },
+        returning: true,
+    }).then((data) => res.send(data)).catch(err => {
         res.status(500).send({
             message:
                 err.message || "Some error occurred while updating order."
