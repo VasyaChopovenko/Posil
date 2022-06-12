@@ -28,7 +28,12 @@ exports.update = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    Order.findAll({include: "items", }).then(data => res.send(data)).catch(err => {
+    Order.findAll(
+        {
+            include: "items",
+            where: {status: req.query.status || ['Нове', 'В процесі', 'Виконано']}
+        }
+        ).then(data => res.send(data)).catch(err => {
         res.status(500).send({
             message:
                 err.message || "Some error occurred while retrieving orders."

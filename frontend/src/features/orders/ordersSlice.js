@@ -7,8 +7,9 @@ const initialState = ordersAdapter.getInitialState({
     productsIds: []
 });
 
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-    const response = await http.get('/orders');
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (status) => {
+    console.log(status);
+    const response = !status ? await http.get('/orders') : await http.get(`/orders?status=${status}`);
     return response.data;
 });
 
@@ -36,7 +37,6 @@ const ordersSlice = createSlice({
 
 export const {
     selectAll: selectAllOrders,
-    selectIds: selectAllOrdersIds,
     selectById: selectOrderById
 } = ordersAdapter.getSelectors(state => state.orders);
 
