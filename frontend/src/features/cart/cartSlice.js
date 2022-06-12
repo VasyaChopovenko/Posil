@@ -91,7 +91,7 @@ function getCartItems() {
 }
 
 function getCartTotalPrice(cartItems) {
-    return Object.values(cartItems.entities).reduce((accumulator, current) => accumulator + +current.totalPrice, 0)
+    return Object.values(cartItems.entities).reduce((accumulator, current) => +(accumulator + +current.totalPrice).toFixed(2), 0)
 }
 
 function getMappedItems() {

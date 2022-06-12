@@ -155,9 +155,11 @@ export default function EditProductForm() {
     return (
         <Container>
             <div className="shadow-sm bg-white rounded m-1 pb-2">
-                <div className="d-flex bg-white">
-                    <img style={{maxWidth: '30rem', maxHeight: '30rem'}} className="p-4 w-auto h-auto"
-                         src={imgUrl || img}/>
+                <div className="d-flex justify-content-evenly bg-white">
+                    <div style={{width: '25rem'}}><img style={{objectFit: 'contain'}}
+                                               className="p-2 position-relative top-0 d-block h-100 w-100"
+                                               src={imgUrl || img}/>
+                    </div>
                     <div style={{width: '40%'}}>
                         <Form>
                             <Form.Group controlId="formFile" className="mb-3">

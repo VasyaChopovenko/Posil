@@ -136,10 +136,12 @@ export default function AddNewProduct() {
     return (
         <Container>
             <div className="shadow-sm bg-white rounded m-1 p-4">
-                <div className="d-flex bg-white">
-                    <img style={{maxWidth: '30rem', maxHeight: '30rem'}} className="p-4 w-auto h-auto"
-                         src={imgUrl || 'https://www.topperstutors.com/img/upload.png'}/>
-                    <div style={{width: '40%'}}>
+                <div className="d-flex justify-content-evenly bg-white">
+                    <div style={{width: '25rem'}}><img style={{objectFit: 'contain'}}
+                        className="p-4 d-block h-100 w-100"
+                        src={imgUrl || 'https://www.topperstutors.com/img/upload.png'}/>
+                    </div>
+                    <div className="w-50">
                         <Form>
                             <Form.Group className="mb-3">
                                 <Form.Label>Виберіть нове фото</Form.Label>
