@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         minAmount: {
             type: DataTypes.REAL,
             defaultValue: 1.0
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
         }
     }, {
         sequelize,

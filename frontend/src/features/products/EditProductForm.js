@@ -138,8 +138,8 @@ export default function EditProductForm() {
         setImgUrl(URL.createObjectURL(e.target.files[0]));
     };
 
-    const onDeleteProductClicked = () => {
-        dispatch(deleteProduct(productId));
+    const onActivateDeactivateProductClicked = () => {
+        dispatch(updateProduct({id: product.id, active: !product.active}));
     };
 
     const minAmountElem =
@@ -206,9 +206,9 @@ export default function EditProductForm() {
                                     onClick={onSaveProductClicked}>
                                 Зберегти
                             </Button>
-                            <Button disabled={isLoading} type="button" variant="danger" className="mt-3"
-                                    onClick={onDeleteProductClicked} href="/">
-                                Видалити
+                            <Button disabled={isLoading} type="button" variant={product?.active ? 'danger' : 'success'} className="mt-3"
+                                    onClick={onActivateDeactivateProductClicked}>
+                                {product?.active ? 'Деактивувати' : 'Активувати'}
                             </Button>
                         </div>
                     </div>

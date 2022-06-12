@@ -94,8 +94,6 @@ const productsSlice = createSlice({
                 productsAdapter.setOne(state, action.payload);
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {
-                console.log(action.payload);
-                console.log(state);
                 productsAdapter.removeOne(state, action.payload);
             })
             .addCase(fetchProductsByIds.fulfilled, (state, action) => {

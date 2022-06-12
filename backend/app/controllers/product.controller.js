@@ -34,7 +34,7 @@ exports.findAll = (req, res) => {
     const categoryId = req.query.categoryId;
     const result = !categoryId ? Product.findAll() : Product.findAll(
         {
-            where: { category_id: categoryId }
+            where: { category_id: categoryId}
         });
 
     result.then(data => {

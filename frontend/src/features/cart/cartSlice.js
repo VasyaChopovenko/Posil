@@ -47,6 +47,13 @@ const cartSlice = createSlice({
         builder
             .addCase(updateProduct.fulfilled, (state, action) => {
                 const updatedProduct = {...action.payload};
+                if (!updatedProduct.active) {
+                    cartAdapter.removeOne(state, updatedProduct.id);
+                    localStorage.setItem('cart', JSON.stringify(state));
+                    state.totalPrice = getCartTotalPrice(state);
+                    return;
+                }
+
                 const cartItem = getCartItems().entities[updatedProduct.id];
                 if (cartItem) {
                     cartAdapter.upsertOne(state, {
