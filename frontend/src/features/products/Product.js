@@ -33,7 +33,7 @@ export default function Product({id}) {
         <Card className="shadow-sm bg-white rounded m-1" style={{minWidth: '16rem', maxWidth: '23rem'}}>
             <Link style={{zIndex: 10}} to={`/products/${product.id}`}
                     className="ms-auto mt-1 me-1"><i className="bi bi-pencil-square"/></Link>
-            <Card.Img variant="top" className="m-auto mt-auto w-75" style={{opacity: product.active && product.count || '0.5'}} src={product.imgUrl}/>
+            <Card.Img variant="top" className="m-auto mt-auto w-75" style={{opacity: (product.active && product.count) || '0.5'}} src={product.imgUrl}/>
             <div>
                 <Card.Body>
                     <Card.Title className="fs-5">{product.name}</Card.Title>

@@ -8,7 +8,7 @@ export default function OrderItem({productId, itemCount}) {
     if (product) {
         return (
             <div>
-                <p className="m-0">{product.name} | {itemCount} x {product.countDesc}</p>
+                <p className="m-0">{product.name} | {itemCount} {product.weighable ? 'кг' : `x ${product.countDesc}`}</p>
             </div>
         );
     } else {

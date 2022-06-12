@@ -21,11 +21,11 @@ export default function AddNewProduct() {
     const [productCategory, setProductCategory] = useState(1);
     const categories = useSelector(selectAllCategories);
     const [weighable, setWeighable] = useState(false);
-    const [minAmount, setMinAmount] = useState();
+    const [minAmount, setMinAmount] = useState('');
     const [minAmountError, setMinAmountError] = useState('');
 
     let allowSubmit = weighable ?
-        minAmount && !minAmountError && img && name && count && !countError && countDesc && integerPricePart :
+        minAmount && !minAmountError && img && name && count && !countError && integerPricePart :
         img && name && count && countDesc && !countError && integerPricePart;
 
     const onSaveProductClicked = async () => {
@@ -33,7 +33,7 @@ export default function AddNewProduct() {
             name,
             price: `${integerPricePart}.${fractionalPricePart ? fractionalPricePart : '0'}`,
             count,
-            countDesc,
+            countDesc: weighable ? getCountDescForWeighableProduct() : countDesc,
             category_id: productCategory,
             weighable: weighable,
             minAmount
@@ -45,6 +45,14 @@ export default function AddNewProduct() {
 
         await dispatch(addProduct(formData));
         navigate(`/`);
+    };
+
+    const getCountDescForWeighableProduct = () => {
+        if (+minAmount < 1) {
+            return (minAmount * 1000) + ' г';
+        } else {
+            return minAmount + ' кг';
+        }
     };
 
     const onCategoryChanged = (e) => {
@@ -168,10 +176,11 @@ export default function AddNewProduct() {
                                     <Form.Label className="mt-2" style={{color: 'red'}}>{countError}:</Form.Label>}
                                 <FormControl type="number" value={count} onChange={onCountChanged}/>
                             </Form.Group>
+                            {weighable ||
                             <Form.Group>
                                 <Form.Label className="mt-2">Опис кількості:</Form.Label>
                                 <FormControl value={countDesc} onChange={onCountDescChanged}/>
-                            </Form.Group>
+                            </Form.Group>}
                             {weighable && minAmountElem}
                         </Form>
                         <Button disabled={!allowSubmit} type="button" className="mt-3" onClick={onSaveProductClicked}>

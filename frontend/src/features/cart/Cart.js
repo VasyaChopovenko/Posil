@@ -3,9 +3,10 @@ import {useDispatch, useSelector} from "react-redux"
 import CartItem from "./CartItem";
 import {ListGroup, Card} from "react-bootstrap"
 import {createOrder, selectAllCartItemsIds} from "./cartSlice"
-import Button from "react-bootstrap/Button";
-import {fetchProducts, fetchProductsByIds} from "../products/productsSlice";
+import {Button, Modal} from "react-bootstrap";
+import {fetchProductsByIds} from "../products/productsSlice";
 import {Form} from "react-bootstrap";
+import {closeModal} from "./cartSlice"
 
 export default function Cart() {
     const dispatch = useDispatch();
@@ -67,6 +68,12 @@ export default function Cart() {
         setAddress('');
     };
 
+    const orderCreated = useSelector(state => state.cart.orderCreated);
+
+    const handleClose = () => {
+        dispatch(closeModal());
+    };
+
     return (
         <section className="d-lg-flex gap-2 m-2">
             <ListGroup className="w-100 gap-2">
@@ -93,6 +100,13 @@ export default function Cart() {
                     <Button onClick={onOrderConfirmed} variant="primary" className="m-auto mt-4"
                             disabled={addressError || !address || phoneError || cartItemsIds.length === 0}>Замовити</Button>
                 </Card.Body>
+
+                <Modal show={orderCreated} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Збережено!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Ваше замовлення успішно створене. Очікуйте дзвінок від кур'єра</Modal.Body>
+                </Modal>
             </Card>
         </section>
     );

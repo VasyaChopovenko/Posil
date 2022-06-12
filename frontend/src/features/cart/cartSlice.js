@@ -6,7 +6,8 @@ const cartItems = getCartItems();
 const cartAdapter = createEntityAdapter();
 const initialState = cartAdapter.getInitialState({
     ...cartItems,
-    totalPrice: getCartTotalPrice(cartItems)
+    totalPrice: getCartTotalPrice(cartItems),
+    orderCreated: false
 });
 
 export const createOrder = createAsyncThunk('cart/createOrder', async ({phone, address}) => {
@@ -42,6 +43,9 @@ const cartSlice = createSlice({
             state.totalPrice = getCartTotalPrice(state);
             localStorage.setItem('cart', JSON.stringify(state));
         },
+        closeModal(state, action) {
+            state.orderCreated = false;
+        },
     },
     extraReducers(builder) {
         builder
@@ -65,6 +69,7 @@ const cartSlice = createSlice({
                 }
             })
             .addCase(createOrder.fulfilled, (state, action) => {
+                state.orderCreated = true;
                 localStorage.removeItem('cart');
                 cartAdapter.removeAll(state);
             })
@@ -77,7 +82,7 @@ export const {
     selectById: selectCartItemById
 } = cartAdapter.getSelectors(state => state.cart);
 
-export const {addToCart, deleteFromCart, updateCartItem} = cartSlice.actions;
+export const {addToCart, deleteFromCart, updateCartItem, closeModal} = cartSlice.actions;
 export default cartSlice.reducer;
 
 function getCartItems() {

@@ -26,8 +26,8 @@ export default function Counter(props) {
     const onIncrementClicked = () => {
         const newValue = value + minAmount;
         if (newValue <= count) {
-            setValue(+newValue.toFixed(1));
-            props.onChange(+newValue.toFixed(1));
+            setValue(+newValue.toFixed(2));
+            props.onChange(+newValue.toFixed(2));
         } else if (!oldValue && props.weighable) {
             setOldValue(value);
             setValue(count);
@@ -42,8 +42,8 @@ export default function Counter(props) {
             props.onChange(oldValue);
             setOldValue(0);
         } else if (newValue >= minAmount) {
-            setValue(+newValue.toFixed(1));
-            props.onChange(+newValue.toFixed(1));
+            setValue(+newValue.toFixed(2));
+            props.onChange(+newValue.toFixed(2));
         }
     };
 
