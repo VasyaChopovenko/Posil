@@ -21,7 +21,7 @@ export default function AddNewProduct() {
     const [productCategory, setProductCategory] = useState(1);
     const categories = useSelector(selectAllCategories);
     const [weighable, setWeighable] = useState(false);
-    const [minAmount, setMinAmount] = useState('');
+    const [minAmount, setMinAmount] = useState(1);
     const [minAmountError, setMinAmountError] = useState('');
 
     let allowSubmit = weighable ?
@@ -125,7 +125,7 @@ export default function AddNewProduct() {
         <Form.Group>
             {!minAmountError ?
                 <Form.Label
-                    className="mt-2">{'Мінімальна кількість при додаванні в корзину (у кілограмах):'}</Form.Label> :
+                    className="mt-2">{'Мінімальна кількість при додаванні в кошик (у кілограмах):'}</Form.Label> :
                 <Form.Label style={{color: 'red'}} className="mt-2">{minAmountError}</Form.Label>}
             <FormControl type="number" value={minAmount} onChange={onMinAmountChanged}/>
         </Form.Group>;

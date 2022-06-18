@@ -71,7 +71,7 @@ export default function EditProductForm() {
             name,
             price: `${integerPricePart}.${fractionalPricePart ? fractionalPricePart : '0'}`,
             count: +count,
-            countDesc,
+            countDesc: product.weighable ? getCountDescForWeighableProduct() : countDesc,
             category_id: productCategory,
             weighable: product.weighable,
             minAmount
@@ -82,6 +82,14 @@ export default function EditProductForm() {
         setLoading(false);
         await dispatch(setFetchIdleStatus());
         navigate(`/`);
+    };
+
+    const getCountDescForWeighableProduct = () => {
+        if (+minAmount < 1) {
+            return (minAmount * 1000) + ' г';
+        } else {
+            return minAmount + ' кг';
+        }
     };
 
     const updateImage = async () => {
@@ -125,6 +133,20 @@ export default function EditProductForm() {
         }
     };
 
+    const onMinAmountChanged = (e) => {
+        const newMinAmount = e.target.value;
+
+        setMinAmount(newMinAmount);
+
+        if (+newMinAmount <= 0) {
+            setMinAmountError('Мінімальна кількість не бути менше або дорівнювати нулю');
+        } else if (+newMinAmount > +count) {
+            setMinAmountError('Мінімальна кількість не може бути більшою за наявну');
+        } else {
+            setMinAmountError('');
+        }
+    };
+
     const onCountDescChanged = (e) => {
         setCountDesc(e.target.value);
     };
@@ -142,12 +164,16 @@ export default function EditProductForm() {
         dispatch(updateProduct({id: product.id, active: !product.active}));
     };
 
+    const onDeleteProductClicked = () => {
+        dispatch(deleteProduct(product.id));
+    };
+
     const minAmountElem =
         <Form.Group>
             {!minAmountError ?
-                <Form.Label className="mt-2">Мінімальна кількість при додаванні в корзину (у кілограмах):</Form.Label> :
+                <Form.Label className="mt-2">Мінімальна кількість при додаванні в кошик (у кілограмах):</Form.Label> :
                 <Form.Label style={{color: 'red'}} className="mt-2">{minAmountError}</Form.Label>}
-            <FormControl disabled type="number" value={minAmount}/>
+            <FormControl onChange={onMinAmountChanged} disabled={product?.active} type="number" value={minAmount}/>
         </Form.Group>;
 
     const categoryOptions = categories.map(category => <option key={category.id}
@@ -157,8 +183,8 @@ export default function EditProductForm() {
             <div className="shadow-sm bg-white rounded m-1 pb-2">
                 <div className="d-flex justify-content-evenly bg-white">
                     <div style={{width: '25rem'}}><img style={{objectFit: 'contain'}}
-                                               className="p-2 position-relative top-0 d-block h-100 w-100"
-                                               src={imgUrl || img}/>
+                                                       className="p-2 position-relative top-0 d-block h-100 w-100"
+                                                       src={imgUrl || img}/>
                     </div>
                     <div style={{width: '40%'}}>
                         <Form>
@@ -208,9 +234,15 @@ export default function EditProductForm() {
                                     onClick={onSaveProductClicked}>
                                 Зберегти
                             </Button>
-                            <Button disabled={isLoading} type="button" variant={product?.active ? 'danger' : 'success'} className="mt-3"
+                            <Button disabled={isLoading} type="button" variant={product?.active ? 'warning' : 'success'}
+                                    className="mt-3"
                                     onClick={onActivateDeactivateProductClicked}>
                                 {product?.active ? 'Деактивувати' : 'Активувати'}
+                            </Button>
+                            <Button disabled={product?.active} type="button" variant="danger"
+                                    className="mt-3"
+                                    onClick={onDeleteProductClicked} href="/">
+                                Видалити
                             </Button>
                         </div>
                     </div>

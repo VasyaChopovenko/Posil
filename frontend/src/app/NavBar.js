@@ -43,15 +43,15 @@ export default function NavBar() {
                         style={{maxHeight: '100px'}}
                         navbarScroll
                     >
-                        <Nav.Link href="/cart" bg="primary" className="p-0 bg-primary text-white rounded me-1">
+                        <Nav.Link href="/cart" className="p-0 bg-primary text-white rounded me-1">
                             <Button className="fs-5"><i className="bi bi-basket"/> {cartItemsCount ? `${cartItemsCount} на ${totalPrice} грн` : 'Кошик'}
                             </Button>
                         </Nav.Link>
                         <Nav.Link href="/products/add" className="p-0 text-white rounded me-1">
-                            <Button variant="outline-primary" className="fs-5"><i className="bi bi-plus-square"/> Додати продукт</Button>
+                            <Button variant="outline-primary" className="fs-5 w-100"><i className="bi bi-plus-square"/> Додати продукт</Button>
                         </Nav.Link>
                         <Nav.Link href="/orders" className="p-0 text-white rounded">
-                            <Button variant="outline-primary" className="fs-5"><i className="bi bi-truck"/> Замовлення</Button>
+                            <Button variant="outline-primary" className="fs-5 w-100"><i className="bi bi-truck"/> Замовлення</Button>
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

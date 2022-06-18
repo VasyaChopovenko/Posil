@@ -16,6 +16,7 @@ const categoriesSlice = createSlice({
     initialState,
     reducers: {
         updateCategory(state, action) {
+            state.activeCategory = action.payload;
             localStorage.setItem('categoryId', action.payload);
         }
     },
